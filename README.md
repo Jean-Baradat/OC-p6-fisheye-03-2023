@@ -4,3 +4,6 @@
 
 Rien à installer ici, il suffit d'ouvrir le fichier `index.html`.
 
+### Guide for commit emoji :zap:
+https://gitmoji.dev/
+
