@@ -39,19 +39,21 @@ class PhotographerConstructor {
     templatePhotographerCard() {
         return `
         <article>
-            <img src="./${this.portrait}" alt="${this.name}">
-            <h2><a href="./pages/photographer.html?id=${this.id}">${this.name}</a></h2>
-            <p class="info">
-                <span class="locate">
-                    ${this.city}, ${this.country}
-                </span>
-                <span class="tagline">
-                    ${this.tagline}
-                </span>
-                <span class="price">
-                    ${this.price}€/jour
-                </span>
-            </p>
+            <a href="./pages/photographer.html?id=${this.id}">
+                <img src="./${this.portrait}" alt="${this.name}">
+                <h2>${this.name}</h2>
+                <p class="info">
+                    <span class="locate">
+                        ${this.city}, ${this.country}
+                    </span>
+                    <span class="tagline">
+                        ${this.tagline}
+                    </span>
+                    <span class="price">
+                        ${this.price}€/jour
+                    </span>
+                </p>
+            </a>
         </article>
         `;
     }
