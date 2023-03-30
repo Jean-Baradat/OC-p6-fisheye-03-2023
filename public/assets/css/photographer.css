@@ -1,11 +1,46 @@
+.photographer-h1 {
+    color: var(--jasper);
+    font-size: 4rem;
+    font-weight: normal;
+    padding-bottom: 1rem;
+    line-height: .8;
+}
+
 #contact_modal {
     display: none;
+}
+
+.photograph-header #informations .locate {
+    color: var(--carmine);
+    font-size: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+.photograph-header #informations .tagline {
+    font-size: 1.125rem;
+    color: var(--davy-s-gray);
 }
 
 .photograph-header {
     background-color: #FAFAFA;
     height: 300px;
     margin: 0 100px;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    min-width: min-content;
+    border-radius: 5px;
+}
+
+#profile-photo img {
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    border-radius: 10rem;
+    display: block;
+    box-shadow: 0 0 10px 5px rgba(238, 238, 238, 0.5);
 }
 
 .contact_button {

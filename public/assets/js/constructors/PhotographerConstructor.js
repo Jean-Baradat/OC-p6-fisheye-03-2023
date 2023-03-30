@@ -28,7 +28,7 @@ class PhotographerConstructor {
         return this._price;
     }
     get portrait() {
-        return `./assets/img/profile-photo/${this._portrait}`;
+        return `assets/img/profile-photo/${this._portrait}`;
     }
 
 
@@ -39,8 +39,8 @@ class PhotographerConstructor {
     templatePhotographerCard() {
         return `
         <article>
-            <img src="${this.portrait}" alt="${this.name}">
-            <h2>${this.name}</h2>
+            <img src="./${this.portrait}" alt="${this.name}">
+            <h2><a href="./pages/photographer.html?id=${this.id}">${this.name}</a></h2>
             <p class="info">
                 <span class="locate">
                     ${this.city}, ${this.country}
@@ -53,6 +53,24 @@ class PhotographerConstructor {
                 </span>
             </p>
         </article>
-        `
+        `;
+    }
+
+    templatePhotographerPageInfo() {
+        return `
+        <h1 class="photographer-h1">${this.name}</h1>
+        <p class="locate">
+            ${this.city}, ${this.country}
+        </p>
+        <p class="tagline">
+            ${this.tagline}
+        </p>
+        `;
+    }
+
+    templatePhotographerPagePhoto() {
+        return `
+        <img src="./../${this.portrait}" alt="${this.name}">
+        `;
     }
 }

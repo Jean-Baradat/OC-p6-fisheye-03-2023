@@ -2,27 +2,32 @@
 <html>
 
 <head>
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="./../assets/css/style.css" rel="stylesheet" type="text/css" />
+    <link href="./../assets/css/normalize.css" rel="stylesheet" type="text/css" />
     <meta charset="utf-8">
-    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="icon" type="image/png" href="./../assets/img/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
     <title>Fisheye - photographe </title>
 </head>
 
 <body>
     <header>
-        <img src="assets/images/logo.png" class="logo" />
+        <img src="./../assets/img/images/logo.png" class="logo" />
     </header>
     <main id="main">
         <div class="photograph-header">
-            <button class="contact_button" onclick="displayModal()">Contactez-moi</button>
+            <div id="informations"></div>
+            <button class="contact_button" onclick="displayModal()">
+                Contactez-moi
+            </button>
+            <div id="profile-photo"></div>
         </div>
     </main>
     <div id="contact_modal">
         <div class="modal">
             <header>
                 <h2>Contactez-moi</h2>
-                <img src="assets/icons/close.svg" onclick="closeModal()" />
+                <img src="./../assets/img/icons/close.svg" onclick="closeModal()" />
             </header>
             <form>
                 <div>
@@ -33,8 +38,15 @@
             </form>
         </div>
     </div>
-    <script src="/scripts/pages/photographer.js"></script>
-    <script src="/scripts/utils/contactForm.js"></script>
+    <!-- API -->
+    <script src="./../assets/js/api/Api.js"></script>
+    <!-- constructor -->
+    <script src="./../assets/js/constructors/PhotographerConstructor.js"></script>
+    <!-- factorie -->
+    <script src="./../assets/js/factories/PhotographerFactory.js"></script>
+    <!-- main js -->
+    <script src="./../assets/js/pages/photographer.js"></script>
+    <script src="./../assets/js/utils/contactForm.js"></script>
 </body>
 
 </html>

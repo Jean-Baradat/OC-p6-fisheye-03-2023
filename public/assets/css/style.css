@@ -4,6 +4,7 @@
     --carmine: #901C1C;
     --jasper: #D3573C;
     --gray: #757575;
+    --davy-s-gray: #525252;
 }
 
 body {
@@ -20,7 +21,7 @@ header {
     height: 90px;
 }
 
-h1 {
+.home-h1 {
     color: var(--carmine);
     margin-right: 100px;
 }
