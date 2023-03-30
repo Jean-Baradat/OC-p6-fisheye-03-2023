@@ -58,6 +58,10 @@ class PhotographerConstructor {
         `;
     }
 
+    /**
+     * Template of infos in photographer profile page
+     * @returns {string} Template HTML
+     */
     templatePhotographerPageInfo() {
         return `
         <h1 class="photographer-h1">${this.name}</h1>
@@ -70,6 +74,10 @@ class PhotographerConstructor {
         `;
     }
 
+    /**
+     * Template of photo in photographer profile page
+     * @returns {string} Template HTML
+     */
     templatePhotographerPagePhoto() {
         return `
         <img src="./../${this.portrait}" alt="${this.name}">
