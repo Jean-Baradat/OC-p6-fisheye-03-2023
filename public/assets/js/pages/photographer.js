@@ -7,9 +7,6 @@ window.addEventListener("load", () => {
     let photographerFactory = new PhotographerFactory();
     let data = photographerFactory.main();
 
-
-
-
     data.then((res) => {
         const filteredPhotographer = res.filter(checkPhotographerId);
         headerInformations.innerHTML += filteredPhotographer[0].templatePhotographerPageInfo()
@@ -18,17 +15,17 @@ window.addEventListener("load", () => {
 
     // Functions
     /**
-     * 
-     * @param {*} photographer 
-     * @returns 
+     * This function check if id in query is equal to one of photographer
+     * @param {object} photographer 
+     * @returns {boolean} true/false condition for the filter
      */
     function checkPhotographerId(photographer) {
         return photographer.id == getQueryId();
     }
 
     /**
-     * 
-     * @returns 
+     * This function get the id in the url query
+     * @returns {string} the id in query
      */
     function getQueryId() {
         return new URLSearchParams(window.location.search).get("id");
