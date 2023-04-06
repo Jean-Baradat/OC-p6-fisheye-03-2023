@@ -7,16 +7,17 @@
     <meta charset="utf-8">
     <link rel="icon" type="image/png" href="./../assets/img/favicon.png">
     <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/77dffb7ded.js" crossorigin="anonymous"></script>
     <title>Fisheye - photographe </title>
 </head>
 
-<body>
-    <header>
+<body class="photographer">
+    <header class="main">
         <a href="./../index.html">
-            <img src="./../assets/img/images/logo.png" class="logo" />
+            <img src="./../assets/img/images/logo.png" class="logo" alt="Fisheye" />
         </a>
     </header>
-    <main id="main">
+    <main id="photograph-page">
         <div class="photograph-header">
             <div id="informations"></div>
             <button class="contact_button" onclick="displayModal()">
@@ -24,6 +25,10 @@
             </button>
             <div id="profile-photo"></div>
         </div>
+        <section class="section-media">
+            <button></button>
+            <div class="medias"></div>
+        </section>
     </main>
     <div id="contact_modal">
         <div class="modal">
@@ -44,8 +49,10 @@
     <script src="./../assets/js/api/Api.js"></script>
     <!-- constructor -->
     <script src="./../assets/js/constructors/PhotographerConstructor.js"></script>
+    <script src="./../assets/js/constructors/MediaConstructor.js"></script>
     <!-- factorie -->
     <script src="./../assets/js/factories/PhotographerFactory.js"></script>
+    <script src="./../assets/js/factories/MediaFactory.js"></script>
     <!-- main js -->
     <script src="./../assets/js/pages/photographer.js"></script>
     <script src="./../assets/js/utils/contactForm.js"></script>

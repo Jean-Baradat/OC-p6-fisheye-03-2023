@@ -2,25 +2,39 @@ window.addEventListener("load", () => {
     // DOM
     let headerInformations = document.querySelector('#informations');
     let headerProfilePhoto = document.querySelector('#profile-photo');
+    let sectionMedia = document.querySelector('.medias');
 
-    // initialize the PhotographerFactory and execute the main method to get the data
+    // initialize the PhotographerFactory and 
+    // execute the main method to get the data (in photographerData)
     let photographerFactory = new PhotographerFactory();
-    let data = photographerFactory.main();
+    let photographerData = photographerFactory.main();
+    // initialize the MediaFactory and execute the main method to get the data (in mediaData)
+    let mediaFactory = new MediaFactory();
+    let mediaData = mediaFactory.main();
 
-    data.then((res) => {
-        const filteredPhotographer = res.filter(checkPhotographerId);
-        headerInformations.innerHTML += filteredPhotographer[0].templatePhotographerPageInfo()
-        headerProfilePhoto.innerHTML += filteredPhotographer[0].templatePhotographerPagePhoto()
+    mediaData.then((res) => {
+        const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
+        filteredMedia.forEach(element => {
+            sectionMedia.innerHTML += element.templateMediaPageInfo();
+        });
+    });
+
+    photographerData.then((res) => {
+        const filteredPhotographer = res.filter(dataTest => checkPhotographerId(dataTest, "id"));
+        headerInformations.innerHTML += filteredPhotographer[0].templatePhotographerPageInfo();
+        headerProfilePhoto.innerHTML += filteredPhotographer[0].templatePhotographerPagePhoto();
     });
 
     // Functions
     /**
-     * This function check if id in query is equal to one of photographer
-     * @param {object} photographer 
+     * This function check if id in query is equal to one of photographerData id or 
+     * mediaData photographerId
+     * @param {object} data 
+     * @param {string} nameId 
      * @returns {boolean} true/false condition for the filter
      */
-    function checkPhotographerId(photographer) {
-        return photographer.id == getQueryId();
+    function checkPhotographerId(data, nameId) {
+        return data[nameId] == getQueryId();
     }
 
     /**
