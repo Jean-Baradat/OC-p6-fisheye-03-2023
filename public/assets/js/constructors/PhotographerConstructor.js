@@ -84,7 +84,11 @@ class PhotographerConstructor {
         `;
     }
 
-    templateTest() {
+    /**
+     * Template of price in photographer profile page
+     * @returns {string} Template HTML
+     */
+    templateOfPrice() {
         return `
         <p>${this.price}€ / jour</p>
         `;

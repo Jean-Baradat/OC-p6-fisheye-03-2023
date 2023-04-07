@@ -57,7 +57,7 @@ class MediaConstructor {
     }
 
     /**
-     * Generates an HTML card to display a media.
+     * Generates an HTML card to display a media
      * @returns {string} Template HTML
      */
     templateMediaPageInfo() {
@@ -77,9 +77,14 @@ class MediaConstructor {
         `;
     }
 
-    templateTest(totalLikes) {
+    /**
+     * Template of total likes in photographer profile page
+     * @param {number} totalLikes - Total likes of the photographer
+     * @returns {string} Template HTML
+     */
+    templateOfTotalLikes(totalLikes) {
         return `
-        <p>${totalLikes ? totalLikes : undefined}</p>
+        <p>${totalLikes}</p>
         <i class="fa-solid fa-heart"></i>
         `;
     }

@@ -38,14 +38,14 @@ window.addEventListener("load", () => {
                 totalLikes += media.likes;
                 sectionMedia.innerHTML += media.templateMediaPageInfo();
             });
-        totalLikePriceLike.innerHTML += filteredMedia[0].templateTest(totalLikes);
+        totalLikePriceLike.innerHTML += filteredMedia[0].templateOfTotalLikes(totalLikes);
     });
 
     photographerData.then((res) => {
         const filteredPhotographer = res.filter(dataTest => checkPhotographerId(dataTest, "id"));
         headerInformations.innerHTML += filteredPhotographer[0].templatePhotographerPageInfo();
         headerProfilePhoto.innerHTML += filteredPhotographer[0].templatePhotographerPagePhoto();
-        totalLikePricePrice.innerHTML += filteredPhotographer[0].templateTest();
+        totalLikePricePrice.innerHTML += filteredPhotographer[0].templateOfPrice();
     });
 
 
