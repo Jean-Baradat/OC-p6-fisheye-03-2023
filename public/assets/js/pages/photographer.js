@@ -1,5 +1,5 @@
 window.addEventListener("load", () => {
-    // DOM ------------------------------------------------------------------------
+    // DOM --------------------------------------------------------------------------
     let headerInformations = document.querySelector('#informations');
     let headerProfilePhoto = document.querySelector('#profile-photo');
     let sectionMedia = document.querySelector('.medias');
@@ -9,6 +9,8 @@ window.addEventListener("load", () => {
     let selectedFilterBtnText = document.querySelector('.selected-filter-btn-text');
     let filterButton = document.querySelector('.filter .button');
     let filterIcon = document.querySelector('#filter-icon');
+    let totalLikePricePrice = document.querySelector('.total-like-price .price');
+    let totalLikePriceLike = document.querySelector('.total-like-price .like');
 
     /*
         Initialize the PhotographerFactory and execute the main 
@@ -24,19 +26,26 @@ window.addEventListener("load", () => {
     let mediaData = mediaFactory.main();
 
 
-    // Asynchronous data retrieval and DOM manipulation ----------------------------
+    // Variables --------------------------------------------------------------------
+    let totalLikes = 0;
+
+
+    // Asynchronous data retrieval and DOM manipulation -----------------------------
     mediaData.then((res) => {
         const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
         filteredMedia
             .forEach(media => {
+                totalLikes += media.likes;
                 sectionMedia.innerHTML += media.templateMediaPageInfo();
             });
+        totalLikePriceLike.innerHTML += filteredMedia[0].templateTest(totalLikes);
     });
 
     photographerData.then((res) => {
         const filteredPhotographer = res.filter(dataTest => checkPhotographerId(dataTest, "id"));
         headerInformations.innerHTML += filteredPhotographer[0].templatePhotographerPageInfo();
         headerProfilePhoto.innerHTML += filteredPhotographer[0].templatePhotographerPagePhoto();
+        totalLikePricePrice.innerHTML += filteredPhotographer[0].templateTest();
     });
 
 

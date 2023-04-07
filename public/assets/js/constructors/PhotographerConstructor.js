@@ -83,4 +83,10 @@ class PhotographerConstructor {
         <img src="./../${this.portrait}" alt="${this.name}">
         `;
     }
+
+    templateTest() {
+        return `
+        <p>${this.price}€ / jour</p>
+        `;
+    }
 }

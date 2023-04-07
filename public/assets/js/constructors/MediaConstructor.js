@@ -77,4 +77,11 @@ class MediaConstructor {
         `;
     }
 
+    templateTest(totalLikes) {
+        return `
+        <p>${totalLikes ? totalLikes : undefined}</p>
+        <i class="fa-solid fa-heart"></i>
+        `;
+    }
+
 }
