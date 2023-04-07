@@ -1,22 +1,36 @@
 window.addEventListener("load", () => {
-    // DOM
+    // DOM ------------------------------------------------------------------------
     let headerInformations = document.querySelector('#informations');
     let headerProfilePhoto = document.querySelector('#profile-photo');
     let sectionMedia = document.querySelector('.medias');
+    let filterBtnOptions = document.querySelector('#filter-btn-options');
+    let filterBtn = document.querySelector('.filter-btn');
+    let options = document.querySelectorAll('.option');
+    let selectedFilterBtnText = document.querySelector('.selected-filter-btn-text');
+    let filterButton = document.querySelector('.filter .button');
+    let filterIcon = document.querySelector('#filter-icon');
 
-    // initialize the PhotographerFactory and 
-    // execute the main method to get the data (in photographerData)
+    /*
+        Initialize the PhotographerFactory and execute the main 
+        method to get the data (in photographerData)
+    */
     let photographerFactory = new PhotographerFactory();
     let photographerData = photographerFactory.main();
-    // initialize the MediaFactory and execute the main method to get the data (in mediaData)
+    /*
+        Initialize the MediaFactory and execute the main method 
+        to get the data (in mediaData)
+    */
     let mediaFactory = new MediaFactory();
     let mediaData = mediaFactory.main();
 
+
+    // Asynchronous data retrieval and DOM manipulation ----------------------------
     mediaData.then((res) => {
         const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
-        filteredMedia.forEach(element => {
-            sectionMedia.innerHTML += element.templateMediaPageInfo();
-        });
+        filteredMedia
+            .forEach(media => {
+                sectionMedia.innerHTML += media.templateMediaPageInfo();
+            });
     });
 
     photographerData.then((res) => {
@@ -25,24 +39,77 @@ window.addEventListener("load", () => {
         headerProfilePhoto.innerHTML += filteredPhotographer[0].templatePhotographerPagePhoto();
     });
 
-    // Functions
+
+    // Event ------------------------------------------------------------------------
+    // Event for the filter button
+    filterBtn.addEventListener('click', toggleFilterBtnMenu);
+    options.forEach(option => {
+        option.addEventListener('click', () => filterMediaByType(option.dataset));
+    });
+    // Event for the click outside the filter button and the menu
+    document.addEventListener("click", (e) => hideFilterMenuOnClickOutside(e));
+
+
+    // Functions --------------------------------------------------------------------
     /**
-     * This function check if id in query is equal to one of photographerData id or 
-     * mediaData photographerId
+     * Checks if a photographer ID matches the ID parameter in the URL
      * @param {object} data 
      * @param {string} nameId 
-     * @returns {boolean} true/false condition for the filter
+     * @returns {boolean} Returns true if the ID in the data object 
+     * matches the ID parameter in the URL, otherwise false
      */
     function checkPhotographerId(data, nameId) {
-        return data[nameId] == getQueryId();
+        return data[nameId] == new URLSearchParams(window.location.search).get("id");
     }
 
     /**
-     * This function get the id in the url query
-     * @returns {string} the id in query
+     * Toggles the visibility and style of the filter button menu and its icon
+     * @returns {void}
      */
-    function getQueryId() {
-        return new URLSearchParams(window.location.search).get("id");
+    function toggleFilterBtnMenu() {
+        filterBtnOptions.classList.toggle("hidden");
+        filterBtn.classList.toggle("rounded-b");
+        filterIcon.classList.toggle("fa-angle-down");
+        filterIcon.classList.toggle("fa-angle-up");
+    }
+
+    /**
+     * This function sort the media by popularity, date or title
+     * @param {object} dataAttributes - The data attributes of the clicked option
+     */
+    function filterMediaByType(dataAttributes) {
+        sectionMedia.innerHTML = "";
+        toggleFilterBtnMenu();
+        selectedFilterBtnText.innerHTML = dataAttributes.content;
+        mediaData.then((res) => {
+            const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
+            filteredMedia
+                .sort((a, b) => {
+                    if (dataAttributes.type == "popularity") {
+                        return b.likes - a.likes;
+                    } else if (dataAttributes.type == "date") {
+                        return new Date(b.date) - new Date(a.date);
+                    } else if (dataAttributes.type == "title") {
+                        return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
+                    }
+                })
+                .forEach(media => {
+                    sectionMedia.innerHTML += media.templateMediaPageInfo();
+                });
+        });
+    }
+
+    /**
+     * This function hides the filter button menu and its icon 
+     * if the user clicks outside the filter button and the menu
+     * @param {object} e - The event object
+     */
+    function hideFilterMenuOnClickOutside(e) {
+        if (e.target !== filterButton && !filterButton.contains(e.target)) {
+            filterBtnOptions.classList.add("hidden");
+            filterBtn.classList.add("rounded-b");
+            filterIcon.classList.replace("fa-angle-up", "fa-angle-down");
+        }
     }
 
 }, false);

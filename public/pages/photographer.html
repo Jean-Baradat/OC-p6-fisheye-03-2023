@@ -26,7 +26,42 @@
             <div id="profile-photo"></div>
         </div>
         <section class="section-media">
-            <button></button>
+            <div class="filter">
+                <label>Trier par</label>
+                <div class="button">
+                    <button class="filter-btn rounded-b">
+                        <div class="content">
+                            <span class="selected-filter-btn-text">
+                                Sélectionner
+                            </span>
+                            <i id="filter-icon" class="fa-solid fa-angle-down"></i>
+                        </div>
+                    </button>
+                    <div id="filter-btn-options" class="hidden">
+                        <button 
+                            type="button" 
+                            class="option" 
+                            data-type="popularity"
+                            data-content="Popularité">
+                            Popularité
+                        </button>
+                        <button 
+                            type="button" 
+                            class="option" 
+                            data-type="date"
+                            data-content="Date">
+                            Date
+                        </button>
+                        <button 
+                            type="button" 
+                            class="option" 
+                            data-type="title"
+                            data-content="Titre">
+                            Titre
+                        </button>
+                    </div>
+                </div>
+            </div>
             <div class="medias"></div>
         </section>
     </main>

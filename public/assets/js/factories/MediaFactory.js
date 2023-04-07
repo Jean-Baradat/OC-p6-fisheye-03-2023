@@ -4,8 +4,11 @@ class MediaFactory {
     }
 
     /**
-     *
-     * @returns {object}
+     * Fetches media data from the PhotographersApi and returns a 
+     * collection of MediaConstructor objects.
+     * @async
+     * @returns {Promise<MediaConstructor[]>} A promise that resolves to 
+     * an array of MediaConstructor objects.
      */
     async main() {
         const Mediasdata = await this.PhotographersApi.getPhotographers();
@@ -14,8 +17,6 @@ class MediaFactory {
             .map(media => {
                 return new MediaConstructor(media)
             });
-
-        // console.log(media);
 
         return media;
     }

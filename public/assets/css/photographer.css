@@ -18,7 +18,7 @@
     row-gap: 30px;
     column-gap: 10px;
     justify-items: center;
-    margin-top: 5rem;
+    margin-top: 2rem;
 }
 
 .media-element {
@@ -165,6 +165,96 @@ form input {
     border-radius: 5px;
 }
 
+/* filter */
+.section-media .filter {
+    display: flex;
+    align-items: center;
+    margin: 2rem 4.3rem;
+    column-gap: 1rem;
+}
+
+.section-media .filter label {
+    font-weight: bold;
+}
+
+.section-media .filter .button {
+    position: relative;
+    width: 10rem;
+}
+
+.section-media .filter .filter-btn {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    border: none;
+    background-color: var(--carmine);
+    border-radius: 5px 5px 0 0;
+    padding: 1rem;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    position: relative;
+}
+
+.section-media .filter .filter-btn:hover {
+    background-color: var(--coral-pink);
+}
+
+.section-media .filter .filter-btn .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.rounded-b {
+    border-radius: 5px !important;
+}
+
+#filter-btn-options {
+    position: absolute;
+    width: 100%;
+    z-index: 1;
+    box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+#filter-btn-options .option {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    border: none;
+    background-color: var(--carmine);
+    padding: 1rem;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.1s ease-in-out;
+}
+
+#filter-btn-options .option::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    width: 90%;
+    height: 1px;
+    background-color: var(--coral-pink);
+}
+
+#filter-btn-options .option:hover {
+    background-color: var(--coral-pink);
+}
+
+#filter-btn-options .option:last-child, 
+#filter-btn-options:last-child {
+    border-radius: 0 0 5px 5px;
+}
 
 @media screen and (max-width: 1260px) {
     .photographer {
@@ -182,6 +272,10 @@ form input {
     .media-element .img {
         width: 300px;
         height: 250px;
+    }
+
+    .section-media .filter {
+        margin: 2rem 2rem;
     }
 }
 

@@ -5,6 +5,7 @@
     --jasper: #D3573C;
     --gray: #757575;
     --davy-s-gray: #525252;
+    --coral-pink: #DB8876;
 }
 
 body {
@@ -28,6 +29,10 @@ header {
 header.main {
     height: 90px;
     margin: 0 4.3rem;
+}
+
+.hidden {
+    display: none;
 }
 
 .home-h1 {

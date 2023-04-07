@@ -56,6 +56,10 @@ class MediaConstructor {
         }
     }
 
+    /**
+     * Generates an HTML card to display a media.
+     * @returns {string} Template HTML
+     */
     templateMediaPageInfo() {
         return `
         <article class="media-element">
