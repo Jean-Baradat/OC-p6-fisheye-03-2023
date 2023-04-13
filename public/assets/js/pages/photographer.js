@@ -92,7 +92,7 @@ window.addEventListener("load", () => {
         selectedFilterBtnText.innerHTML = dataAttributes.content;
         mediaData.then((res) => {
             const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
-            filteredMedia
+            [...filteredMedia]
                 .sort((a, b) => {
                     if (dataAttributes.type == "popularity") {
                         return b.likes - a.likes;
