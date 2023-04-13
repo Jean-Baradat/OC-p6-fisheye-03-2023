@@ -39,6 +39,19 @@ window.addEventListener("load", () => {
                 sectionMedia.innerHTML += media.templateMediaPageInfo();
             });
         totalLikePriceLike.innerHTML += filteredMedia[0].templateOfTotalLikes(totalLikes);
+
+        let test = document.querySelectorAll('.media-element .like');
+        test.forEach(t => {
+            const numberElement = t.querySelector('.number');
+            t.addEventListener('click', handleClick);
+
+            function handleClick() {
+                let number = parseInt(numberElement.innerText);
+                number++;
+                numberElement.innerHTML = number;
+                t.removeEventListener('click', handleClick);
+            }
+        });
     });
 
     photographerData.then((res) => {
@@ -57,6 +70,13 @@ window.addEventListener("load", () => {
     });
     // Event for the click outside the filter button and the menu
     document.addEventListener("click", (e) => hideFilterMenuOnClickOutside(e));
+    // Event for the like button
+    // console.log(mediaHeaderLike);
+    // mediaHeaderLike.forEach(like => {
+    //     like.addEventListener('click', () => {
+    //         console.log("like");
+    //     });
+    // });
 
 
     // Functions --------------------------------------------------------------------

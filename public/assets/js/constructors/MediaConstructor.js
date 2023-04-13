@@ -69,7 +69,7 @@ class MediaConstructor {
             <header>
                 <h3>${this.title}</h3>
                 <div class="like">
-                    <p>${this.likes}</p>
+                    <p class="number">${this.likes}</p>
                     <i class="fa-solid fa-heart"></i>
                 </div>
             </header>
