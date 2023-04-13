@@ -39,19 +39,7 @@ window.addEventListener("load", () => {
                 sectionMedia.innerHTML += media.templateMediaPageInfo();
             });
         totalLikePriceLike.innerHTML += filteredMedia[0].templateOfTotalLikes(totalLikes);
-
-        let test = document.querySelectorAll('.media-element .like');
-        test.forEach(t => {
-            const numberElement = t.querySelector('.number');
-            t.addEventListener('click', handleClick);
-
-            function handleClick() {
-                let number = parseInt(numberElement.innerText);
-                number++;
-                numberElement.innerHTML = number;
-                t.removeEventListener('click', handleClick);
-            }
-        });
+        handleLike(filteredMedia);
     });
 
     photographerData.then((res) => {
@@ -70,13 +58,6 @@ window.addEventListener("load", () => {
     });
     // Event for the click outside the filter button and the menu
     document.addEventListener("click", (e) => hideFilterMenuOnClickOutside(e));
-    // Event for the like button
-    // console.log(mediaHeaderLike);
-    // mediaHeaderLike.forEach(like => {
-    //     like.addEventListener('click', () => {
-    //         console.log("like");
-    //     });
-    // });
 
 
     // Functions --------------------------------------------------------------------
@@ -110,6 +91,7 @@ window.addEventListener("load", () => {
         sectionMedia.innerHTML = "";
         toggleFilterBtnMenu();
         selectedFilterBtnText.innerHTML = dataAttributes.content;
+        totalLikes = 0;
         mediaData.then((res) => {
             const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
             filteredMedia
@@ -123,8 +105,11 @@ window.addEventListener("load", () => {
                     }
                 })
                 .forEach(media => {
+                    totalLikes += media.likes;
                     sectionMedia.innerHTML += media.templateMediaPageInfo();
                 });
+            totalLikePriceLike.innerHTML = filteredMedia[0].templateOfTotalLikes(totalLikes);
+            handleLike(filteredMedia);
         });
     }
 
@@ -139,6 +124,22 @@ window.addEventListener("load", () => {
             filterBtn.classList.add("rounded-b");
             filterIcon.classList.replace("fa-angle-up", "fa-angle-down");
         }
+    }
+
+    function handleLike(filteredMedia) {
+        let cardsIconLike = document.querySelectorAll('.card-icon-like');
+        cardsIconLike.forEach(cardIconLike => {
+            cardIconLike.addEventListener('click', handleClick);
+
+            function handleClick() {
+                let numberOflike = parseInt(cardIconLike.previousElementSibling.innerText);
+                numberOflike++;
+                totalLikes++;
+                totalLikePriceLike.innerHTML = filteredMedia[0].templateOfTotalLikes(totalLikes);
+                cardIconLike.previousElementSibling.innerText = numberOflike;
+                cardIconLike.removeEventListener('click', handleClick);
+            }
+        });
     }
 
 }, false);

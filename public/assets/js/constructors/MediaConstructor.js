@@ -70,7 +70,7 @@ class MediaConstructor {
                 <h3>${this.title}</h3>
                 <div class="like">
                     <p class="number">${this.likes}</p>
-                    <i class="fa-solid fa-heart"></i>
+                    <i class="fa-solid fa-heart card-icon-like"></i>
                 </div>
             </header>
         </article>
