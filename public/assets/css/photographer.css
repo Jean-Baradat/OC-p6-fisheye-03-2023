@@ -51,10 +51,14 @@
     margin-top: 0.2rem;
 }
 
-.media-element header .like{
+.media-element header .like {
     display: flex;
     align-items: center;
     column-gap: 5px;
+}
+
+.media-element header .card-icon-like {
+    cursor: pointer;
 }
 
 .media-element header h3{

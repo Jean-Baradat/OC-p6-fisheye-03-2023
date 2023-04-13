@@ -40,6 +40,7 @@ window.addEventListener("load", () => {
                 sectionMedia.innerHTML += media.templateMediaPageInfo();
             });
         totalLikePriceLike.innerHTML += filteredMedia[0].templateOfTotalLikes(totalLikes);
+        handleLike(filteredMedia);
     });
 
     photographerData.then((res) => {
@@ -92,6 +93,7 @@ window.addEventListener("load", () => {
         sectionMedia.innerHTML = "";
         toggleFilterBtnMenu();
         selectedFilterBtnText.innerHTML = dataAttributes.content;
+        totalLikes = 0;
         mediaData.then((res) => {
             const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
             [...filteredMedia]
@@ -105,8 +107,11 @@ window.addEventListener("load", () => {
                     }
                 })
                 .forEach(media => {
+                    totalLikes += media.likes;
                     sectionMedia.innerHTML += media.templateMediaPageInfo();
                 });
+            totalLikePriceLike.innerHTML = filteredMedia[0].templateOfTotalLikes(totalLikes);
+            handleLike(filteredMedia);
         });
     }
 
@@ -121,6 +126,22 @@ window.addEventListener("load", () => {
             filterBtn.classList.add("rounded-b");
             filterIcon.classList.replace("fa-angle-up", "fa-angle-down");
         }
+    }
+
+    function handleLike(filteredMedia) {
+        let cardsIconLike = document.querySelectorAll('.card-icon-like');
+        cardsIconLike.forEach(cardIconLike => {
+            cardIconLike.addEventListener('click', handleClick);
+
+            function handleClick() {
+                let numberOflike = parseInt(cardIconLike.previousElementSibling.innerText);
+                numberOflike++;
+                totalLikes++;
+                totalLikePriceLike.innerHTML = filteredMedia[0].templateOfTotalLikes(totalLikes);
+                cardIconLike.previousElementSibling.innerText = numberOflike;
+                cardIconLike.removeEventListener('click', handleClick);
+            }
+        });
     }
 
 }, false);
