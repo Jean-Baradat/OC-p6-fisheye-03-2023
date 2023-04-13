@@ -11,6 +11,7 @@ window.addEventListener("load", () => {
     let filterIcon = document.querySelector('#filter-icon');
     let totalLikePricePrice = document.querySelector('.total-like-price .price');
     let totalLikePriceLike = document.querySelector('.total-like-price .like');
+    let contactModalName = document.querySelector('#contact_modal .name');
 
     /*
         Initialize the PhotographerFactory and execute the main 
@@ -46,6 +47,7 @@ window.addEventListener("load", () => {
         headerInformations.innerHTML += filteredPhotographer[0].templatePhotographerPageInfo();
         headerProfilePhoto.innerHTML += filteredPhotographer[0].templatePhotographerPagePhoto();
         totalLikePricePrice.innerHTML += filteredPhotographer[0].templateOfPrice();
+        contactModalName.innerHTML += filteredPhotographer[0].name;
     });
 
 

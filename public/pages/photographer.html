@@ -22,7 +22,7 @@
     <main id="photograph-page">
         <div class="photograph-header">
             <div id="informations"></div>
-            <button class="contact_button" onclick="displayModal()">
+            <button class="contact_button btn-open-modal">
                 Contactez-moi
             </button>
             <div id="profile-photo"></div>
@@ -70,15 +70,42 @@
     <div id="contact_modal">
         <div class="modal">
             <header>
-                <h2>Contactez-moi</h2>
-                <img src="./../assets/img/icons/close.svg" onclick="closeModal()" />
+                <h2>Contactez-moi <span class="name"></span></h2>
+                <img src="./../assets/img/icons/close.svg" class="btn-close-modal" alt="Fermer" />
             </header>
-            <form>
+            <form name="contact-form">
                 <div>
-                    <label>Prénom</label>
-                    <input />
+                    <label for="firstname">Prénom</label>
+                    <input type="text" id="firstname" name="firstname">
+                    <p class="form-fields-error" id="mess-err-firstname">
+                        <i class="fa-solid fa-circle-info"></i>
+                        2 caractères minimum avec tirets et apostrophes autorisés sauf au début 
+                        et à la fin et plus de 2 fois de suite.
+                    </p>
                 </div>
-                <button class="contact_button">Envoyer</button>
+                <div>
+                    <label for="lastname">Nom</label>
+                    <input type="text" id="lastname" name="lastname">
+                    <p class="form-fields-error" id="mess-err-lastname">
+                        <i class="fa-solid fa-circle-info"></i>
+                        2 caractères minimum avec tirets et apostrophes autorisés sauf au début 
+                        et à la fin et plus de 2 fois de suite.
+                    </p>
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email">
+                    <p class="form-fields-error" id="mess-err-email">
+                        <i class="fa-solid fa-circle-info"></i>
+                        Doit respecter le format nom@domain.extention par exemple 
+                        jeanpierre@gmail.com.
+                    </p>
+                </div>
+                <div class="contact-message">
+                    <label for="message">Votre message</label>
+                    <textarea name="message" id="message"></textarea>
+                </div>
+                <button class="contact_button" type="submit">Envoyer</button>
             </form>
         </div>
     </div>

@@ -61,10 +61,6 @@
     font-weight: normal;
 }
 
-#contact_modal {
-    display: none;
-}
-
 .photograph-header {
     background-color: #FAFAFA;
     height: 300px;
@@ -111,31 +107,54 @@
     cursor: pointer;
 }
 
+/* contact modal */
+#contact_modal {
+    position: fixed;
+    display: none;
+    z-index: 3;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: rgba(196, 196, 196, 0.4);
+    align-items: center;
+    justify-content: center;
+}
+
 .modal {
     border-radius: 5px;
     background-color: #DB8876;
-    width: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     padding: 35px;
     margin: auto;
+    max-width: 46rem;
+    box-shadow: -3px 3px 20px 8px rgba(0, 0, 0, 0.1);
+    animation-name: modalopen;
+    animation-duration: 0.8s;
 }
 
 .modal header {
     justify-content: space-between;
+    align-items: flex-start;
     width: 100%;
 }
 
 .modal header img {
     cursor: pointer;
+    margin-left: 5rem;
 }
 
 .modal header h2 {
     font-size: 64px;
     font-weight: normal;
-    text-align: center;
+    text-align: left;
+    line-height: 4.5rem;
+    margin-top: -.8rem;
+    margin-bottom: 2rem;
 }
 
 form {
@@ -155,15 +174,36 @@ form div {
     flex-direction: column;
     width: 100%;
     align-items: self-start;
-    margin-bottom: 26px;
+    margin-bottom: -0.2rem;
 }
 
 form input {
-    width: 100%;
     height: 68px;
+}
+
+form input, form textarea {
+    width: 100%;
     border: none;
     border-radius: 5px;
+    font-size: 1.4rem;
+    padding: 1rem;
 }
+
+.modal form .contact-message textarea {
+    height: 150px;
+    margin-bottom: 20px;
+    resize: vertical;
+    min-height: 68px;
+    max-height: 190px;
+}
+
+.form-fields-error {
+    visibility: hidden;
+    font-size: 12px;
+    font-weight: normal;
+    padding-top: 3px;
+    color: rgb(255, 255, 255);
+  }
 
 /* filter */
 .section-media .filter {
@@ -346,3 +386,14 @@ form input {
         box-shadow: none;
     }
 }
+
+@keyframes modalopen {
+    0% {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+  
+    100% {
+      opacity: 1;
+    }
+  }

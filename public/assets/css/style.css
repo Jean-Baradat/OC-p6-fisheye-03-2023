@@ -8,6 +8,11 @@
     --coral-pink: #DB8876;
 }
 
+html {
+    overflow-y: scroll;
+    width: 100%;
+}
+
 body {
     font-family: "DM Sans", sans-serif;
     margin: 0;
