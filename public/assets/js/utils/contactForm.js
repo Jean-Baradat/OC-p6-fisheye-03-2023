@@ -4,9 +4,6 @@ window.addEventListener("load", () => {
     const btnCloseModal = document.querySelector('.btn-close-modal');
     const html = document.querySelector('html');
     const formContactForm = document.querySelector('form[name="contact-form"]');
-    const messErrFirstname = document.querySelector('#mess-err-firstname');
-    const messErrLastname = document.querySelector('#mess-err-lastname');
-    const messErrEmail = document.querySelector('#mess-err-email');
 
 
     // VARIABLES ---------------------------------------------------------------------

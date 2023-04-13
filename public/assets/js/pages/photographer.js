@@ -33,22 +33,24 @@ window.addEventListener("load", () => {
 
     // Asynchronous data retrieval and DOM manipulation -----------------------------
     mediaData.then((res) => {
+        let allMediaHTML = "";
         const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
         filteredMedia
             .forEach(media => {
                 totalLikes += media.likes;
-                sectionMedia.innerHTML += media.templateMediaPageInfo();
+                allMediaHTML += media.templateMediaPageInfo();
             });
-        totalLikePriceLike.innerHTML += filteredMedia[0].templateOfTotalLikes(totalLikes);
-        handleLike(filteredMedia);
+        sectionMedia.innerHTML += allMediaHTML;
+        totalLikePriceLike.innerText += totalLikes;
+        handleLike();
     });
 
     photographerData.then((res) => {
         const filteredPhotographer = res.filter(dataTest => checkPhotographerId(dataTest, "id"));
         headerInformations.innerHTML += filteredPhotographer[0].templatePhotographerPageInfo();
         headerProfilePhoto.innerHTML += filteredPhotographer[0].templatePhotographerPagePhoto();
-        totalLikePricePrice.innerHTML += filteredPhotographer[0].templateOfPrice();
-        contactModalName.innerHTML += filteredPhotographer[0].name;
+        totalLikePricePrice.innerText += filteredPhotographer[0].price;
+        contactModalName.innerText += filteredPhotographer[0].name;
     });
 
 
@@ -90,7 +92,8 @@ window.addEventListener("load", () => {
      * @param {object} dataAttributes - The data attributes of the clicked option
      */
     function filterMediaByType(dataAttributes) {
-        sectionMedia.innerHTML = "";
+        sectionMedia.innerText = "";
+        let allMediaHTML = "";
         toggleFilterBtnMenu();
         selectedFilterBtnText.innerHTML = dataAttributes.content;
         totalLikes = 0;
@@ -108,10 +111,11 @@ window.addEventListener("load", () => {
                 })
                 .forEach(media => {
                     totalLikes += media.likes;
-                    sectionMedia.innerHTML += media.templateMediaPageInfo();
+                    allMediaHTML += media.templateMediaPageInfo();
                 });
-            totalLikePriceLike.innerHTML = filteredMedia[0].templateOfTotalLikes(totalLikes);
-            handleLike(filteredMedia);
+            sectionMedia.innerHTML = allMediaHTML;
+            totalLikePriceLike.innerText = totalLikes;
+            handleLike();
         });
     }
 
@@ -128,7 +132,7 @@ window.addEventListener("load", () => {
         }
     }
 
-    function handleLike(filteredMedia) {
+    function handleLike() {
         let cardsIconLike = document.querySelectorAll('.card-icon-like');
         cardsIconLike.forEach(cardIconLike => {
             cardIconLike.addEventListener('click', handleClick);
@@ -137,7 +141,7 @@ window.addEventListener("load", () => {
                 let numberOflike = parseInt(cardIconLike.previousElementSibling.innerText);
                 numberOflike++;
                 totalLikes++;
-                totalLikePriceLike.innerHTML = filteredMedia[0].templateOfTotalLikes(totalLikes);
+                totalLikePriceLike.innerText = totalLikes;
                 cardIconLike.previousElementSibling.innerText = numberOflike;
                 cardIconLike.removeEventListener('click', handleClick);
             }

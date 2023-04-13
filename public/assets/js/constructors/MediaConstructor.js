@@ -76,17 +76,4 @@ class MediaConstructor {
         </article>
         `;
     }
-
-    /**
-     * Template of total likes in photographer profile page
-     * @param {number} totalLikes - Total likes of the photographer
-     * @returns {string} Template HTML
-     */
-    templateOfTotalLikes(totalLikes) {
-        return `
-        <p>${totalLikes}</p>
-        <i class="fa-solid fa-heart"></i>
-        `;
-    }
-
 }

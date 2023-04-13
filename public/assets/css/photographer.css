@@ -320,7 +320,7 @@ form input, form textarea {
     transform: scale(1.02);
 }
 
-.total-like-price .like {
+.total-like-price .like-block {
     display: flex;
     align-items: center;
     column-gap: 0.5rem;
