@@ -27,7 +27,7 @@ window.addEventListener("load", () => {
     let mediaData = mediaFactory.main();
 
 
-    // Variables --------------------------------------------------------------------
+    // VARIABLES --------------------------------------------------------------------
     let totalLikes = 0;
     let likeData = [];
 
@@ -65,7 +65,7 @@ window.addEventListener("load", () => {
     });
 
 
-    // Event ------------------------------------------------------------------------
+    // EVENT ------------------------------------------------------------------------
     // Event for the filter button
     filterBtn.addEventListener('click', toggleFilterBtnMenu);
     options.forEach(option => {
@@ -75,7 +75,7 @@ window.addEventListener("load", () => {
     document.addEventListener("click", (e) => hideFilterMenuOnClickOutside(e));
 
 
-    // Functions --------------------------------------------------------------------
+    // FUNCTIONS --------------------------------------------------------------------
     /**
      * Checks if a photographer ID matches the ID parameter in the URL
      * @param {object} data 
