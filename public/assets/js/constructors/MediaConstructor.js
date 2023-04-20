@@ -60,17 +60,17 @@ class MediaConstructor {
      * Generates an HTML card to display a media
      * @returns {string} Template HTML
      */
-    templateMediaPageInfo() {
+    templateMediaPageInfo([like, isLiked]) {
         return `
-        <article class="media-element">
+        <article class="media-element" data-id="${this.id}">
             <a href="#" >
                 ${this.mediaType}
             </a>
             <header>
                 <h3>${this.title}</h3>
                 <div class="like">
-                    <p class="number">${this.likes}</p>
-                    <i class="fa-solid fa-heart card-icon-like"></i>
+                    <p class="number">${like}</p>
+                    <i class="fa-solid fa-heart card-icon-like" data-liked="${isLiked}"></i>
                 </div>
             </header>
         </article>

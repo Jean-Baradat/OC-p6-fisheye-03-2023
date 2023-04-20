@@ -29,6 +29,7 @@ window.addEventListener("load", () => {
 
     // Variables --------------------------------------------------------------------
     let totalLikes = 0;
+    let likeData = [];
 
 
     // Asynchronous data retrieval and DOM manipulation -----------------------------
@@ -38,11 +39,21 @@ window.addEventListener("load", () => {
         filteredMedia
             .forEach(media => {
                 totalLikes += media.likes;
-                allMediaHTML += media.templateMediaPageInfo();
+                likeData.push(
+                    {
+                        "id": media.id,
+                        "like": media.likes,
+                        "liked": false,
+                    }
+                );
+
+                allMediaHTML += media.templateMediaPageInfo(getLikeData(media, likeData));
             });
         sectionMedia.innerHTML += allMediaHTML;
         totalLikePriceLike.innerText += totalLikes;
-        handleLike();
+
+        let cardsIconLike = sectionMedia.querySelectorAll('.card-icon-like');
+        handleLike(cardsIconLike, likeData);
     });
 
     photographerData.then((res) => {
@@ -96,7 +107,6 @@ window.addEventListener("load", () => {
         let allMediaHTML = "";
         toggleFilterBtnMenu();
         selectedFilterBtnText.innerHTML = dataAttributes.content;
-        totalLikes = 0;
         mediaData.then((res) => {
             const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
             [...filteredMedia]
@@ -110,12 +120,11 @@ window.addEventListener("load", () => {
                     }
                 })
                 .forEach(media => {
-                    totalLikes += media.likes;
-                    allMediaHTML += media.templateMediaPageInfo();
+                    allMediaHTML += media.templateMediaPageInfo(getLikeData(media, likeData));
                 });
             sectionMedia.innerHTML = allMediaHTML;
-            totalLikePriceLike.innerText = totalLikes;
-            handleLike();
+            let cardsIconLike = sectionMedia.querySelectorAll('.card-icon-like');
+            handleLike(cardsIconLike, likeData);
         });
     }
 
@@ -132,20 +141,49 @@ window.addEventListener("load", () => {
         }
     }
 
-    function handleLike() {
-        let cardsIconLike = document.querySelectorAll('.card-icon-like');
-        cardsIconLike.forEach(cardIconLike => {
-            cardIconLike.addEventListener('click', handleClick);
+    /**
+     * This function update the like data and previous like number
+     * @param {array} cardsIconLike
+     * @param {array} likeData
+     */
+    function handleLike(cardsIconLike, likeData) {
+        function handleLikeClick(event) {
+            if (event.target.dataset.liked === "false") {
+                let idOfMedia = event.target.parentElement.parentElement.parentElement.dataset.id;
 
-            function handleClick() {
-                let numberOflike = parseInt(cardIconLike.previousElementSibling.innerText);
-                numberOflike++;
+                likeData.forEach(data => {
+                    if (data.id === parseInt(idOfMedia)) {
+                        data.like++;
+                        data.liked = true;
+                        event.target.previousElementSibling.innerText = data.like;
+                        event.target.dataset.liked = data.liked;
+                    }
+                });
                 totalLikes++;
                 totalLikePriceLike.innerText = totalLikes;
-                cardIconLike.previousElementSibling.innerText = numberOflike;
-                cardIconLike.removeEventListener('click', handleClick);
+            }
+        }
+        cardsIconLike.forEach(cardIconLike => {
+            cardIconLike.addEventListener('click', handleLikeClick);
+        });
+    }
+
+    /**
+     * This function get the like data of a media and return it
+     * @param {object} media 
+     * @param {array} likeData 
+     * @returns {array} Returns an array with the like number and the liked status
+     */
+    function getLikeData(media, likeData) {
+        let like = null;
+        let isLiked = null;
+        likeData.forEach(data => {
+            if (data.id === media.id) {
+                like = data.like;
+                isLiked = data.liked;
             }
         });
+        return [like, isLiked];
     }
 
 }, false);
