@@ -57,7 +57,10 @@ class MediaConstructor {
     }
 
     /**
-     * Generates an HTML card to display a media
+     * Generates an HTML card to display a media on the photographer page
+     * @param {Array<number|boolean>[]} likeData - Contains likes informations
+     * @param {number} likeData[].like - Number of likes for the media
+     * @param {boolean} likeData[].isLiked - Is liked by the user
      * @returns {string} Template HTML
      */
     templateMediaPageInfo([like, isLiked]) {
