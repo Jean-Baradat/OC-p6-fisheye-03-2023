@@ -147,24 +147,23 @@ window.addEventListener("load", () => {
      * @param {array} likeData
      */
     function handleLike(cardsIconLike, likeData) {
-        function handleLikeClick(event) {
-            if (event.target.dataset.liked === "false") {
-                let idOfMedia = event.target.parentElement.parentElement.parentElement.dataset.id;
-
-                likeData.forEach(data => {
-                    if (data.id === parseInt(idOfMedia)) {
-                        data.like++;
-                        data.liked = true;
-                        event.target.previousElementSibling.innerText = data.like;
-                        event.target.dataset.liked = data.liked;
-                    }
-                });
-                totalLikes++;
-                totalLikePriceLike.innerText = totalLikes;
-            }
-        }
         cardsIconLike.forEach(cardIconLike => {
-            cardIconLike.addEventListener('click', handleLikeClick);
+            cardIconLike.addEventListener('click', (event) => {
+                if (event.target.dataset.liked === "false") {
+                    let idOfMedia = event.target.parentElement.parentElement.parentElement.dataset.id;
+
+                    likeData.forEach(data => {
+                        if (data.id === parseInt(idOfMedia)) {
+                            data.like++;
+                            data.liked = true;
+                            event.target.previousElementSibling.innerText = data.like;
+                            event.target.dataset.liked = data.liked;
+                        }
+                    });
+                    totalLikes++;
+                    totalLikePriceLike.innerText = totalLikes;
+                }
+            });
         });
     }
 
