@@ -17,12 +17,14 @@ window.addEventListener("load", () => {
         Initialize the PhotographerFactory and execute the main 
         method to get the data (in photographerData)
     */
+    // eslint-disable-next-line no-undef
     let photographerFactory = new PhotographerFactory();
     let photographerData = photographerFactory.main();
     /*
         Initialize the MediaFactory and execute the main method 
         to get the data (in mediaData)
     */
+    // eslint-disable-next-line no-undef
     let mediaFactory = new MediaFactory();
     let mediaData = mediaFactory.main();
 

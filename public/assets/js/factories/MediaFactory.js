@@ -1,5 +1,7 @@
+// eslint-disable-next-line no-unused-vars
 class MediaFactory {
     constructor() {
+        // eslint-disable-next-line no-undef
         this.PhotographersApi = new PhotographersApi('./../../../data/photographers.json', "media")
     }
 
@@ -15,6 +17,7 @@ class MediaFactory {
 
         let media = Mediasdata
             .map(media => {
+                // eslint-disable-next-line no-undef
                 return new MediaConstructor(media)
             });
 
