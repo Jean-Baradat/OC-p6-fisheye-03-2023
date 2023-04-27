@@ -2,7 +2,8 @@ window.addEventListener("load", () => {
     // DOM --------------------------------------------------------------------------
     let headerInformations = document.querySelector('#informations');
     let headerProfilePhoto = document.querySelector('#profile-photo');
-    let sectionMedia = document.querySelector('.medias');
+    let medias = document.querySelector('.medias');
+    let mediasCarrousel = document.querySelector('.medias-carrousel');
     let filterBtnOptions = document.querySelector('#filter-btn-options');
     let filterBtn = document.querySelector('.filter-btn');
     let options = document.querySelectorAll('.option');
@@ -12,6 +13,7 @@ window.addEventListener("load", () => {
     let totalLikePricePrice = document.querySelector('.total-like-price .price');
     let totalLikePriceLike = document.querySelector('.total-like-price .like');
     let contactModalName = document.querySelector('#contact_modal .name');
+    const html = document.querySelector('html');
 
     /*
         Initialize the PhotographerFactory and execute the main 
@@ -35,6 +37,7 @@ window.addEventListener("load", () => {
     // Asynchronous data retrieval and DOM manipulation -----------------------------
     mediaData.then((res) => {
         let allMediaHTML = "";
+        let allMediaCarrouselHTML = "";
         const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
         filteredMedia
             .forEach(media => {
@@ -48,11 +51,16 @@ window.addEventListener("load", () => {
                 );
 
                 allMediaHTML += media.templateMediaPageInfo(getLikeData(media, likeData));
+                allMediaCarrouselHTML += media.templateMediaLightbox();
             });
-        sectionMedia.innerHTML += allMediaHTML;
+        medias.innerHTML += allMediaHTML;
+        mediasCarrousel.innerHTML += allMediaCarrouselHTML;
         totalLikePriceLike.innerText += totalLikes;
 
-        let cardsIconLike = sectionMedia.querySelectorAll('.card-icon-like');
+        let sectionMedia = document.querySelector('.section-media');
+        handleMediaModal(sectionMedia);
+
+        let cardsIconLike = medias.querySelectorAll('.card-icon-like');
         handleLike(cardsIconLike, likeData);
     });
 
@@ -73,6 +81,8 @@ window.addEventListener("load", () => {
     });
     // Event for the click outside the filter button and the menu
     document.addEventListener("click", (e) => hideFilterMenuOnClickOutside(e));
+
+
 
 
     // FUNCTIONS --------------------------------------------------------------------
@@ -103,8 +113,9 @@ window.addEventListener("load", () => {
      * @param {object} dataAttributes - The data attributes of the clicked option
      */
     function filterMediaByType(dataAttributes) {
-        sectionMedia.innerText = "";
+        medias.innerText = "";
         let allMediaHTML = "";
+        let allMediaCarrouselHTML = "";
         toggleFilterBtnMenu();
         selectedFilterBtnText.innerHTML = dataAttributes.content;
         mediaData.then((res) => {
@@ -121,9 +132,15 @@ window.addEventListener("load", () => {
                 })
                 .forEach(media => {
                     allMediaHTML += media.templateMediaPageInfo(getLikeData(media, likeData));
+                    allMediaCarrouselHTML += media.templateMediaLightbox();
                 });
-            sectionMedia.innerHTML = allMediaHTML;
-            let cardsIconLike = sectionMedia.querySelectorAll('.card-icon-like');
+            medias.innerHTML = allMediaHTML;
+            mediasCarrousel.innerHTML = allMediaCarrouselHTML;
+
+            let sectionMedia = document.querySelector('.section-media');
+            handleMediaModal(sectionMedia);
+
+            let cardsIconLike = medias.querySelectorAll('.card-icon-like');
             handleLike(cardsIconLike, likeData);
         });
     }
@@ -183,6 +200,85 @@ window.addEventListener("load", () => {
             }
         });
         return [like, isLiked];
+    }
+
+    function handleMediaModal(sectionMedia) {
+        let mediaElement = sectionMedia.querySelectorAll('.media-element .media-image');
+        let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
+        // let mediasCarrousel = sectionMedia.querySelector('.medias-carrousel');
+        let listLightbox = [...mediaLightbox];
+
+        mediaLightbox.forEach(lightbox => {
+            let mediaLightboxClose = lightbox.querySelector('.btn-close-lightbox');
+            let mediaLightboxNext = lightbox.querySelector('.btn-right-lightbox');
+            let mediaLightboxPrevious = lightbox.querySelector('.btn-left-lightbox');
+
+            // let test = lightbox.closest('.media-lightbox');
+
+            // console.log(test);
+
+            mediaLightboxClose.addEventListener('click', () => {
+                lightbox.classList.add("hidden");
+                html.style.overflowY = 'scroll';
+            });
+
+
+            mediaLightboxNext.addEventListener("keydown", event => {
+                if (event.key == "ArrowRight") {
+                    handleMediaLightboxBtnNext(listLightbox, lightbox);
+                }
+            });
+
+            mediaLightboxPrevious.addEventListener("keydown", event => {
+                if (event.key == "ArrowLeft") {
+                    handleMediaLightboxBtnPrevious(listLightbox, lightbox);
+                }
+            });
+
+            mediaLightboxNext.addEventListener('click', () =>
+                handleMediaLightboxBtnNext(listLightbox, lightbox)
+            );
+
+            mediaLightboxPrevious.addEventListener('click', () =>
+                handleMediaLightboxBtnPrevious(listLightbox, lightbox)
+            );
+        });
+
+        mediaElement.forEach(media => {
+            media.addEventListener('click', () => {
+                let idOfMedia = media.parentElement.dataset.id;
+
+                mediaLightbox.forEach(lightbox => {
+                    if (lightbox.dataset.id == idOfMedia) {
+                        lightbox.classList.remove("hidden");
+                        html.style.overflowY = 'hidden';
+                    }
+                });
+            });
+        });
+    }
+
+    function handleMediaLightboxBtnNext(listLightbox, lightbox) {
+        // console.log("test");
+        if (listLightbox.indexOf(lightbox) == listLightbox.length - 1) {
+            // console.log("ici");
+            listLightbox[0].classList.remove("hidden");
+            lightbox.classList.add("hidden");
+        } else {
+            // console.log("ici1");
+            listLightbox[listLightbox.indexOf(lightbox) + 1].classList.remove("hidden");
+            lightbox.classList.add("hidden");
+        }
+    }
+
+    function handleMediaLightboxBtnPrevious(listLightbox, lightbox) {
+        if (listLightbox.indexOf(lightbox) == 0) {
+            listLightbox[listLightbox.length - 1].classList.remove("hidden");
+            lightbox.classList.add("hidden");
+        } else {
+            listLightbox[listLightbox.indexOf(lightbox) - 1].classList.remove("hidden");
+            lightbox.classList.add("hidden");
+        }
     }
 
 }, false);
