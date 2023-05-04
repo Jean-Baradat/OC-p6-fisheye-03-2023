@@ -85,21 +85,10 @@ class MediaConstructor {
     templateMediaLightbox() {
         return `
         <div class="media-lightbox hidden" data-id="${this.id}">
-            <button class="btn-left-lightbox" autofocus>
-                <img src="./../assets/img/icons/chevron-left.svg" alt="Précédent" class="arrow-left">
-            </button>
-            <div class="lightbox-content">
-                <figure>
-                    ${this.mediaType(true)}
-                    <figcaption>${this.title}</figcaption>
-                </figure>
-                <button class="btn-close-lightbox">
-                    <img src="./../assets/img/icons/close-carmine.svg" alt="Fermer" class="close-img">
-                </button>
-            </div>
-            <button class="btn-right-lightbox" autofocus>
-                <img src="./../assets/img/icons/chevron-right.svg" alt="Suivant" class="arrow-right">
-            </button>
+            <figure>
+                ${this.mediaType(true)}
+                <figcaption>${this.title}</figcaption>
+            </figure>
         </div>
         `;
     }

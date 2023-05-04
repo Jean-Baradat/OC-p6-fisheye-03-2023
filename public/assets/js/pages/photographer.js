@@ -14,6 +14,8 @@ window.addEventListener("load", () => {
     let totalLikePriceLike = document.querySelector('.total-like-price .like');
     let contactModalName = document.querySelector('#contact_modal .name');
     const html = document.querySelector('html');
+    let sectionMedia = document.querySelector('.section-media');
+    let carrouselIsOpen = false;
 
     /*
         Initialize the PhotographerFactory and execute the main 
@@ -57,8 +59,8 @@ window.addEventListener("load", () => {
         mediasCarrousel.innerHTML += allMediaCarrouselHTML;
         totalLikePriceLike.innerText += totalLikes;
 
-        let sectionMedia = document.querySelector('.section-media');
-        handleMediaModal(sectionMedia);
+        handleClickOfMediaImage(sectionMedia);
+        carrouselManager(sectionMedia);
 
         let cardsIconLike = medias.querySelectorAll('.card-icon-like');
         handleLike(cardsIconLike, likeData);
@@ -137,8 +139,7 @@ window.addEventListener("load", () => {
             medias.innerHTML = allMediaHTML;
             mediasCarrousel.innerHTML = allMediaCarrouselHTML;
 
-            let sectionMedia = document.querySelector('.section-media');
-            handleMediaModal(sectionMedia);
+            handleClickOfMediaImage(sectionMedia);
 
             let cardsIconLike = medias.querySelectorAll('.card-icon-like');
             handleLike(cardsIconLike, likeData);
@@ -202,51 +203,54 @@ window.addEventListener("load", () => {
         return [like, isLiked];
     }
 
-    function handleMediaModal(sectionMedia) {
-        let mediaElement = sectionMedia.querySelectorAll('.media-element .media-image');
+    function carrouselManager(sectionMedia) {
+        // DOM ----------
+        let carrousel = sectionMedia.querySelector('.carrousel');
+
         let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
-        // let mediasCarrousel = sectionMedia.querySelector('.medias-carrousel');
-        let listLightbox = [...mediaLightbox];
+        let mediaImage = sectionMedia.querySelectorAll('.media-element .media-image');
 
-        mediaLightbox.forEach(lightbox => {
-            let mediaLightboxClose = lightbox.querySelector('.btn-close-lightbox');
-            let mediaLightboxNext = lightbox.querySelector('.btn-right-lightbox');
-            let mediaLightboxPrevious = lightbox.querySelector('.btn-left-lightbox');
+        let mediaLightboxClose = carrousel.querySelector('.btn-close-lightbox');
+        let btnRightLightbox = carrousel.querySelector('.btn-right-lightbox');
+        let btnLeftLightbox = carrousel.querySelector('.btn-left-lightbox');
 
-            // let test = lightbox.closest('.media-lightbox');
-
-            // console.log(test);
-
-            mediaLightboxClose.addEventListener('click', () => {
-                lightbox.classList.add("hidden");
-                html.style.overflowY = 'scroll';
-            });
-
-
-            mediaLightboxNext.addEventListener("keydown", event => {
-                if (event.key == "ArrowRight") {
-                    handleMediaLightboxBtnNext(listLightbox, lightbox);
-                }
-            });
-
-            mediaLightboxPrevious.addEventListener("keydown", event => {
-                if (event.key == "ArrowLeft") {
-                    handleMediaLightboxBtnPrevious(listLightbox, lightbox);
-                }
-            });
-
-            mediaLightboxNext.addEventListener('click', () =>
-                handleMediaLightboxBtnNext(listLightbox, lightbox)
-            );
-
-            mediaLightboxPrevious.addEventListener('click', () =>
-                handleMediaLightboxBtnPrevious(listLightbox, lightbox)
-            );
+        // EVENT --------
+        mediaLightboxClose.addEventListener('click', () => {
+            carrouselIsOpen = false;
+            carrousel.classList.add("hidden");
+            html.style.overflowY = 'scroll';
+            carrouselLightboxManager(sectionMedia, 1);
         });
 
-        mediaElement.forEach(media => {
+        btnRightLightbox.addEventListener('click', () =>
+            carrouselLightboxManager(sectionMedia, 2)
+        );
+
+        btnLeftLightbox.addEventListener('click', () =>
+            carrouselLightboxManager(sectionMedia, 3)
+        );
+
+        document.addEventListener("keydown", e => {
+            if (carrouselIsOpen) {
+                if (e.key == "ArrowRight") {
+                    carrouselLightboxManager(sectionMedia, 2);
+                }
+            }
+        });
+
+        document.addEventListener("keydown", e => {
+            if (carrouselIsOpen) {
+                if (e.key == "ArrowLeft") {
+                    carrouselLightboxManager(sectionMedia, 3);
+                }
+            }
+        });
+
+        mediaImage.forEach(media => {
             media.addEventListener('click', () => {
+                carrouselIsOpen = true;
                 let idOfMedia = media.parentElement.dataset.id;
+                carrousel.classList.remove("hidden");
 
                 mediaLightbox.forEach(lightbox => {
                     if (lightbox.dataset.id == idOfMedia) {
@@ -258,27 +262,59 @@ window.addEventListener("load", () => {
         });
     }
 
-    function handleMediaLightboxBtnNext(listLightbox, lightbox) {
-        // console.log("test");
-        if (listLightbox.indexOf(lightbox) == listLightbox.length - 1) {
-            // console.log("ici");
-            listLightbox[0].classList.remove("hidden");
-            lightbox.classList.add("hidden");
-        } else {
-            // console.log("ici1");
-            listLightbox[listLightbox.indexOf(lightbox) + 1].classList.remove("hidden");
-            lightbox.classList.add("hidden");
+    function carrouselLightboxManager(sectionMedia, index) {
+        let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
+
+        if (index === 1) {
+            mediaLightbox.forEach(lightbox => {
+                lightbox.classList.add("hidden");
+            });
+        } else if (index === 2) {
+            toggleNextLightbox("right", mediaLightbox);
+        } else if (index === 3) {
+            toggleNextLightbox("left", mediaLightbox);
         }
     }
 
-    function handleMediaLightboxBtnPrevious(listLightbox, lightbox) {
-        if (listLightbox.indexOf(lightbox) == 0) {
-            listLightbox[listLightbox.length - 1].classList.remove("hidden");
-            lightbox.classList.add("hidden");
-        } else {
-            listLightbox[listLightbox.indexOf(lightbox) - 1].classList.remove("hidden");
-            lightbox.classList.add("hidden");
-        }
+    function handleClickOfMediaImage(sectionMedia) {
+        let carrousel = sectionMedia.querySelector('.carrousel');
+        let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
+        let mediaImage = sectionMedia.querySelectorAll('.media-element .media-image');
+
+        mediaImage.forEach(media => {
+            media.addEventListener('click', () => {
+                carrouselIsOpen = true;
+                let idOfMedia = media.parentElement.dataset.id;
+                carrousel.classList.remove("hidden");
+
+                mediaLightbox.forEach(lightbox => {
+                    if (lightbox.dataset.id == idOfMedia) {
+                        lightbox.classList.remove("hidden");
+                        html.style.overflowY = 'hidden';
+                    }
+                });
+            });
+        });
+    }
+
+    function toggleNextLightbox(direction, mediaLightbox) {
+        let stopLoop = false;
+
+        mediaLightbox.forEach((lightbox, index) => {
+            if (!stopLoop && !lightbox.classList.contains("hidden")) {
+                lightbox.classList.add("hidden");
+
+                let newIndex;
+                if (direction === "right") {
+                    newIndex = (index + 1) % mediaLightbox.length;
+                } else if (direction === "left") {
+                    newIndex = (index - 1 + mediaLightbox.length) % mediaLightbox.length;
+                }
+
+                mediaLightbox[newIndex].classList.remove("hidden");
+                stopLoop = true;
+            }
+        });
     }
 
 }, false);
