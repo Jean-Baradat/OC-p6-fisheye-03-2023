@@ -205,6 +205,10 @@ window.addEventListener("load", () => {
         return [like, isLiked];
     }
 
+    /**
+     * This function manage the carrousel by add event listener on the buttons and keyboard
+     * @param {html} sectionMedia - The section media
+     */
     function carrouselManager(sectionMedia) {
         // DOM ----------
         let carrousel = sectionMedia.querySelector('.carrousel');
@@ -221,21 +225,21 @@ window.addEventListener("load", () => {
             carrouselIsOpen = false;
             carrousel.classList.add("hidden");
             html.style.overflowY = 'scroll';
-            carrouselLightboxManager(sectionMedia, 1);
+            carrouselLightboxManager(sectionMedia, "close");
         });
 
         btnRightLightbox.addEventListener('click', () =>
-            carrouselLightboxManager(sectionMedia, 2)
+            carrouselLightboxManager(sectionMedia, "right")
         );
 
         btnLeftLightbox.addEventListener('click', () =>
-            carrouselLightboxManager(sectionMedia, 3)
+            carrouselLightboxManager(sectionMedia, "left")
         );
 
         document.addEventListener("keydown", e => {
             if (carrouselIsOpen) {
                 if (e.key == "ArrowRight") {
-                    carrouselLightboxManager(sectionMedia, 2);
+                    carrouselLightboxManager(sectionMedia, "right");
                 }
             }
         });
@@ -243,7 +247,7 @@ window.addEventListener("load", () => {
         document.addEventListener("keydown", e => {
             if (carrouselIsOpen) {
                 if (e.key == "ArrowLeft") {
-                    carrouselLightboxManager(sectionMedia, 3);
+                    carrouselLightboxManager(sectionMedia, "left");
                 }
             }
         });
@@ -264,20 +268,32 @@ window.addEventListener("load", () => {
         });
     }
 
-    function carrouselLightboxManager(sectionMedia, index) {
+    /**
+     * This function manage the carrousel lightbox by reload the lightbox 
+     * (media-lightbox) and after with the action parameter (close, right, left) 
+     * it close or toggle the next/previous lightbox 
+     * @param {html} sectionMedia - The section media
+     * @param {string} action - The action to do (close, right, left)
+     */
+    function carrouselLightboxManager(sectionMedia, action) {
         let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
 
-        if (index === 1) {
+        if (action === "close") {
             mediaLightbox.forEach(lightbox => {
                 lightbox.classList.add("hidden");
             });
-        } else if (index === 2) {
+        } else if (action === "right") {
             toggleNextLightbox("right", mediaLightbox);
-        } else if (index === 3) {
+        } else if (action === "left") {
             toggleNextLightbox("left", mediaLightbox);
         }
     }
 
+    /**
+     * This function add event listener on the media image to open 
+     * the carrousel and open the carrousel and the lightbox
+     * @param {html} sectionMedia - The section media
+     */
     function handleClickOfMediaImage(sectionMedia) {
         let carrousel = sectionMedia.querySelector('.carrousel');
         let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
@@ -299,6 +315,12 @@ window.addEventListener("load", () => {
         });
     }
 
+    /**
+     * This function toggle the next lightbox when the user click 
+     * on the right or left button
+     * @param {string} direction - The direction of the toggle (right, left)
+     * @param {array} mediaLightbox - The array of all media lightbox
+     */
     function toggleNextLightbox(direction, mediaLightbox) {
         let stopLoop = false;
 
