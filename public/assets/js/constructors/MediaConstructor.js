@@ -35,23 +35,25 @@ class MediaConstructor {
     get price() {
         return this._price;
     }
-    get mediaType() {
+
+    mediaType(isModal) {
         if (this._image) {
             return `
             <img 
                 src="./../assets/img/media/${this.photographerId}/${this.image}" 
                 alt="${this.title}"
                 title="${this.title}"
-                class="img"
+                class="media"
             >
             `;
         } else {
             return `
             <video 
+                ${isModal ? "controls" : ""}
                 src="./../assets/img/media/${this.photographerId}/${this.video}" 
                 type="video/mp4"
                 title="${this.title}"
-                class="img">
+                class="media">
             </video>
             `;
         }
@@ -67,9 +69,9 @@ class MediaConstructor {
     templateMediaPageInfo([like, isLiked]) {
         return `
         <article class="media-element" data-id="${this.id}">
-            <a href="#" >
-                ${this.mediaType}
-            </a>
+            <div class="media-image">
+                ${this.mediaType(false)}
+            </div>
             <header>
                 <h3>${this.title}</h3>
                 <div class="like">
@@ -78,6 +80,17 @@ class MediaConstructor {
                 </div>
             </header>
         </article>
+        `;
+    }
+
+    templateMediaLightbox() {
+        return `
+        <div class="media-lightbox hidden" data-id="${this.id}">
+            <figure>
+                ${this.mediaType(true)}
+                <figcaption>${this.title}</figcaption>
+            </figure>
+        </div>
         `;
     }
 }

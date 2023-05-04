@@ -2,7 +2,8 @@ window.addEventListener("load", () => {
     // DOM --------------------------------------------------------------------------
     let headerInformations = document.querySelector('#informations');
     let headerProfilePhoto = document.querySelector('#profile-photo');
-    let sectionMedia = document.querySelector('.medias');
+    let medias = document.querySelector('.medias');
+    let mediasCarrousel = document.querySelector('.medias-carrousel');
     let filterBtnOptions = document.querySelector('#filter-btn-options');
     let filterBtn = document.querySelector('.filter-btn');
     let options = document.querySelectorAll('.option');
@@ -12,6 +13,9 @@ window.addEventListener("load", () => {
     let totalLikePricePrice = document.querySelector('.total-like-price .price');
     let totalLikePriceLike = document.querySelector('.total-like-price .like');
     let contactModalName = document.querySelector('#contact_modal .name');
+    const html = document.querySelector('html');
+    let sectionMedia = document.querySelector('.section-media');
+    let carrouselIsOpen = false;
 
     /*
         Initialize the PhotographerFactory and execute the main 
@@ -37,6 +41,7 @@ window.addEventListener("load", () => {
     // Asynchronous data retrieval and DOM manipulation -----------------------------
     mediaData.then((res) => {
         let allMediaHTML = "";
+        let allMediaCarrouselHTML = "";
         const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
         filteredMedia
             .forEach(media => {
@@ -50,11 +55,16 @@ window.addEventListener("load", () => {
                 );
 
                 allMediaHTML += media.templateMediaPageInfo(getLikeData(media, likeData));
+                allMediaCarrouselHTML += media.templateMediaLightbox();
             });
-        sectionMedia.innerHTML += allMediaHTML;
+        medias.innerHTML += allMediaHTML;
+        mediasCarrousel.innerHTML += allMediaCarrouselHTML;
         totalLikePriceLike.innerText += totalLikes;
 
-        let cardsIconLike = sectionMedia.querySelectorAll('.card-icon-like');
+        handleClickOfMediaImage(sectionMedia);
+        carrouselManager(sectionMedia);
+
+        let cardsIconLike = medias.querySelectorAll('.card-icon-like');
         handleLike(cardsIconLike, likeData);
     });
 
@@ -75,6 +85,8 @@ window.addEventListener("load", () => {
     });
     // Event for the click outside the filter button and the menu
     document.addEventListener("click", (e) => hideFilterMenuOnClickOutside(e));
+
+
 
 
     // FUNCTIONS --------------------------------------------------------------------
@@ -105,8 +117,9 @@ window.addEventListener("load", () => {
      * @param {object} dataAttributes - The data attributes of the clicked option
      */
     function filterMediaByType(dataAttributes) {
-        sectionMedia.innerText = "";
+        medias.innerText = "";
         let allMediaHTML = "";
+        let allMediaCarrouselHTML = "";
         toggleFilterBtnMenu();
         selectedFilterBtnText.innerHTML = dataAttributes.content;
         mediaData.then((res) => {
@@ -123,9 +136,14 @@ window.addEventListener("load", () => {
                 })
                 .forEach(media => {
                     allMediaHTML += media.templateMediaPageInfo(getLikeData(media, likeData));
+                    allMediaCarrouselHTML += media.templateMediaLightbox();
                 });
-            sectionMedia.innerHTML = allMediaHTML;
-            let cardsIconLike = sectionMedia.querySelectorAll('.card-icon-like');
+            medias.innerHTML = allMediaHTML;
+            mediasCarrousel.innerHTML = allMediaCarrouselHTML;
+
+            handleClickOfMediaImage(sectionMedia);
+
+            let cardsIconLike = medias.querySelectorAll('.card-icon-like');
             handleLike(cardsIconLike, likeData);
         });
     }
@@ -185,6 +203,120 @@ window.addEventListener("load", () => {
             }
         });
         return [like, isLiked];
+    }
+
+    function carrouselManager(sectionMedia) {
+        // DOM ----------
+        let carrousel = sectionMedia.querySelector('.carrousel');
+
+        let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
+        let mediaImage = sectionMedia.querySelectorAll('.media-element .media-image');
+
+        let mediaLightboxClose = carrousel.querySelector('.btn-close-lightbox');
+        let btnRightLightbox = carrousel.querySelector('.btn-right-lightbox');
+        let btnLeftLightbox = carrousel.querySelector('.btn-left-lightbox');
+
+        // EVENT --------
+        mediaLightboxClose.addEventListener('click', () => {
+            carrouselIsOpen = false;
+            carrousel.classList.add("hidden");
+            html.style.overflowY = 'scroll';
+            carrouselLightboxManager(sectionMedia, 1);
+        });
+
+        btnRightLightbox.addEventListener('click', () =>
+            carrouselLightboxManager(sectionMedia, 2)
+        );
+
+        btnLeftLightbox.addEventListener('click', () =>
+            carrouselLightboxManager(sectionMedia, 3)
+        );
+
+        document.addEventListener("keydown", e => {
+            if (carrouselIsOpen) {
+                if (e.key == "ArrowRight") {
+                    carrouselLightboxManager(sectionMedia, 2);
+                }
+            }
+        });
+
+        document.addEventListener("keydown", e => {
+            if (carrouselIsOpen) {
+                if (e.key == "ArrowLeft") {
+                    carrouselLightboxManager(sectionMedia, 3);
+                }
+            }
+        });
+
+        mediaImage.forEach(media => {
+            media.addEventListener('click', () => {
+                carrouselIsOpen = true;
+                let idOfMedia = media.parentElement.dataset.id;
+                carrousel.classList.remove("hidden");
+
+                mediaLightbox.forEach(lightbox => {
+                    if (lightbox.dataset.id == idOfMedia) {
+                        lightbox.classList.remove("hidden");
+                        html.style.overflowY = 'hidden';
+                    }
+                });
+            });
+        });
+    }
+
+    function carrouselLightboxManager(sectionMedia, index) {
+        let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
+
+        if (index === 1) {
+            mediaLightbox.forEach(lightbox => {
+                lightbox.classList.add("hidden");
+            });
+        } else if (index === 2) {
+            toggleNextLightbox("right", mediaLightbox);
+        } else if (index === 3) {
+            toggleNextLightbox("left", mediaLightbox);
+        }
+    }
+
+    function handleClickOfMediaImage(sectionMedia) {
+        let carrousel = sectionMedia.querySelector('.carrousel');
+        let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
+        let mediaImage = sectionMedia.querySelectorAll('.media-element .media-image');
+
+        mediaImage.forEach(media => {
+            media.addEventListener('click', () => {
+                carrouselIsOpen = true;
+                let idOfMedia = media.parentElement.dataset.id;
+                carrousel.classList.remove("hidden");
+
+                mediaLightbox.forEach(lightbox => {
+                    if (lightbox.dataset.id == idOfMedia) {
+                        lightbox.classList.remove("hidden");
+                        html.style.overflowY = 'hidden';
+                    }
+                });
+            });
+        });
+    }
+
+    function toggleNextLightbox(direction, mediaLightbox) {
+        let stopLoop = false;
+
+        mediaLightbox.forEach((lightbox, index) => {
+            if (!stopLoop && !lightbox.classList.contains("hidden")) {
+                lightbox.classList.add("hidden");
+
+                let newIndex;
+                if (direction === "right") {
+                    newIndex = (index + 1) % mediaLightbox.length;
+                } else if (direction === "left") {
+                    newIndex = (index - 1 + mediaLightbox.length) % mediaLightbox.length;
+                }
+
+                mediaLightbox[newIndex].classList.remove("hidden");
+                stopLoop = true;
+            }
+        });
     }
 
 }, false);
