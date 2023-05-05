@@ -68,7 +68,12 @@ class MediaConstructor {
      */
     templateMediaPageInfo([like, isLiked]) {
         return `
-        <article class="media-element" data-id="${this.id}">
+        <article 
+            class="media-element" 
+            data-id="${this.id}" 
+            data-like="${this.likes}" 
+            data-date="${this.date}" 
+            data-title="${this.title}">
             <div class="media-image">
                 ${this.mediaType(false)}
             </div>
@@ -85,7 +90,12 @@ class MediaConstructor {
 
     templateMediaLightbox() {
         return `
-        <div class="media-lightbox hidden" data-id="${this.id}">
+        <div 
+            class="media-lightbox hidden" 
+            data-id="${this.id}"
+            data-like="${this.likes}" 
+            data-date="${this.date}" 
+            data-title="${this.title}">
             <figure>
                 ${this.mediaType(true)}
                 <figcaption>${this.title}</figcaption>
