@@ -41,16 +41,16 @@ class MediaConstructor {
             return `
             <img 
                 src="./../assets/img/media/${this.photographerId}/${this.image}" 
-                alt="${this.title}"
+                alt="Photo nommée ${this.title}"
                 title="${this.title}"
-                class="media"
-            >
+                class="media">
             `;
         } else {
             return `
             <video 
                 ${isModal ? "controls" : ""}
                 src="./../assets/img/media/${this.photographerId}/${this.video}" 
+                alt="Vidéo nommée ${this.title}"
                 type="video/mp4"
                 title="${this.title}"
                 class="media">
@@ -68,7 +68,7 @@ class MediaConstructor {
      */
     templateMediaPageInfo([like, isLiked]) {
         return `
-        <article 
+        <article
             class="media-element" 
             data-id="${this.id}" 
             data-like="${this.likes}" 
@@ -78,11 +78,11 @@ class MediaConstructor {
                 ${this.mediaType(false)}
             </div>
             <header>
-                <h3>${this.title}</h3>
-                <div class="like">
-                    <p class="number">${like}</p>
+                <h2 title="Titre : ${this.title}">${this.title}</h2>
+                <p class="like">
+                    <span class="number">${like}</span>
                     <i class="fa-solid fa-heart card-icon-like" data-liked="${isLiked}"></i>
-                </div>
+                </p>
             </header>
         </article>
         `;

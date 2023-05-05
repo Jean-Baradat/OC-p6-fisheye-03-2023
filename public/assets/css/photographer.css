@@ -59,14 +59,21 @@
     display: flex;
     align-items: center;
     column-gap: 5px;
+    font-size: 24px;
 }
 
 .media-element header .card-icon-like {
     cursor: pointer;
+    font-size: 20px;
 }
 
-.media-element header h3{
+.media-element header h2{
     font-weight: normal;
+    font-size: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 17ch;
 }
 
 .photograph-header {
@@ -80,6 +87,11 @@
     border-radius: 5px;
     margin: 0 4.3rem;
     padding: 0 2rem;
+}
+
+.photograph-header #informations .photographer-info {
+    display: flex;
+    flex-direction: column;
 }
 
 .photograph-header #informations .locate {
@@ -221,13 +233,13 @@ form input, form textarea {
     column-gap: 1rem;
 }
 
-.section-media .filter label {
+.section-media .filter .filter-text {
     font-weight: bold;
 }
 
 .section-media .filter .button {
     position: relative;
-    width: 10rem;
+    width: 11rem;
 }
 
 .section-media .filter .filter-btn {
@@ -241,7 +253,7 @@ form input, form textarea {
     padding: 1rem;
     cursor: pointer;
     color: #ffffff;
-    font-size: 1rem;
+    font-size: 18px;
     font-weight: bold;
     position: relative;
 }
@@ -279,7 +291,7 @@ form input, form textarea {
     padding: 1rem;
     cursor: pointer;
     color: #ffffff;
-    font-size: 1rem;
+    font-size: 18px;
     font-weight: bold;
     transition: background-color 0.1s ease-in-out;
 }
@@ -313,11 +325,12 @@ form input, form textarea {
     bottom: 0;
     right: 3rem;
     padding: 1rem 2rem;
-    width: 18rem;
+    width: 20rem;
     font-weight: bold;
     border-radius: 5px 5px 0 0;
     box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.2);
     transition: transform 0.1s ease-in-out;
+    font-size: 24px;
 }
 
 .total-like-price:hover {

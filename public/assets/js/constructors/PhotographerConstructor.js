@@ -41,7 +41,7 @@ class PhotographerConstructor {
         return `
         <article>
             <a href="./pages/photographer.html?id=${this.id}">
-                <img src="./${this.portrait}" alt="${this.name}">
+                <img src="./${this.portrait}" alt="Photo de profil de ${this.name}">
                 <h2>${this.name}</h2>
                 <p class="info">
                     <span class="locate">
@@ -66,11 +66,13 @@ class PhotographerConstructor {
     templatePhotographerPageInfo() {
         return `
         <h1 class="photographer-h1">${this.name}</h1>
-        <p class="locate">
-            ${this.city}, ${this.country}
-        </p>
-        <p class="tagline">
-            ${this.tagline}
+        <p class="photographer-info">
+            <span class="locate">
+                ${this.city}, ${this.country}
+            </span>
+            <span class="tagline">
+                ${this.tagline}
+            </span>
         </p>
         `;
     }
