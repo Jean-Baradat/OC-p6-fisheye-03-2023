@@ -235,7 +235,7 @@ form input, form textarea {
 
 .section-media .filter .button {
     position: relative;
-    width: 10rem;
+    width: 11rem;
 }
 
 .section-media .filter .filter-btn {
@@ -249,7 +249,7 @@ form input, form textarea {
     padding: 1rem;
     cursor: pointer;
     color: #ffffff;
-    font-size: 1rem;
+    font-size: 18px;
     font-weight: bold;
     position: relative;
 }
@@ -287,7 +287,7 @@ form input, form textarea {
     padding: 1rem;
     cursor: pointer;
     color: #ffffff;
-    font-size: 1rem;
+    font-size: 18px;
     font-weight: bold;
     transition: background-color 0.1s ease-in-out;
 }
@@ -321,11 +321,12 @@ form input, form textarea {
     bottom: 0;
     right: 3rem;
     padding: 1rem 2rem;
-    width: 18rem;
+    width: 20rem;
     font-weight: bold;
     border-radius: 5px 5px 0 0;
     box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.2);
     transition: transform 0.1s ease-in-out;
+    font-size: 24px;
 }
 
 .total-like-price:hover {

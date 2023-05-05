@@ -65,7 +65,7 @@ class MediaConstructor {
     templateMediaPageInfo([like, isLiked]) {
         return `
         <article class="media-element" data-id="${this.id}">
-            <a href="#" >
+            <a href="#" aria-label="Ouverture de l'image ${this.title}">
                 ${this.mediaType}
             </a>
             <header>
