@@ -2,7 +2,8 @@ window.addEventListener("load", () => {
     // DOM --------------------------------------------------------------------------
     let headerInformations = document.querySelector('#informations');
     let headerProfilePhoto = document.querySelector('#profile-photo');
-    let sectionMedia = document.querySelector('.medias');
+    let medias = document.querySelector('.medias');
+    let mediasCarrousel = document.querySelector('.medias-carrousel');
     let filterBtnOptions = document.querySelector('#filter-btn-options');
     let filterBtn = document.querySelector('.filter-btn');
     let options = document.querySelectorAll('.option');
@@ -12,17 +13,22 @@ window.addEventListener("load", () => {
     let totalLikePricePrice = document.querySelector('.total-like-price .price');
     let totalLikePriceLike = document.querySelector('.total-like-price .like');
     let contactModalName = document.querySelector('#contact_modal .name');
+    const html = document.querySelector('html');
+    let sectionMedia = document.querySelector('.section-media');
+    let carrouselIsOpen = false;
 
     /*
         Initialize the PhotographerFactory and execute the main 
         method to get the data (in photographerData)
     */
+    // eslint-disable-next-line no-undef
     let photographerFactory = new PhotographerFactory();
     let photographerData = photographerFactory.main();
     /*
         Initialize the MediaFactory and execute the main method 
         to get the data (in mediaData)
     */
+    // eslint-disable-next-line no-undef
     let mediaFactory = new MediaFactory();
     let mediaData = mediaFactory.main();
 
@@ -32,36 +38,50 @@ window.addEventListener("load", () => {
     let likeData = [];
 
 
-    // Asynchronous data retrieval and DOM manipulation -----------------------------
-    mediaData.then((res) => {
-        let allMediaHTML = "";
-        const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
-        filteredMedia
-            .forEach(media => {
-                totalLikes += media.likes;
-                likeData.push(
-                    {
-                        "id": media.id,
-                        "like": media.likes,
-                        "liked": false,
-                    }
-                );
-
-                allMediaHTML += media.templateMediaPageInfo(getLikeData(media, likeData));
-            });
-        sectionMedia.innerHTML += allMediaHTML;
-        totalLikePriceLike.innerText += totalLikes;
-
-        let cardsIconLike = sectionMedia.querySelectorAll('.card-icon-like');
-        handleLike(cardsIconLike, likeData);
+    // PROMISE ----------------------------------------------------------------------
+    // Filter the media by photographer ID
+    let filteredPhotographerMedia = mediaData.then(res => {
+        return res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
     });
 
-    photographerData.then((res) => {
-        const filteredPhotographer = res.filter(dataTest => checkPhotographerId(dataTest, "id"));
-        headerInformations.innerHTML += filteredPhotographer[0].templatePhotographerPageInfo();
-        headerProfilePhoto.innerHTML += filteredPhotographer[0].templatePhotographerPagePhoto();
-        totalLikePricePrice.innerText += filteredPhotographer[0].price;
-        contactModalName.innerText += filteredPhotographer[0].name;
+    // Filter the photographer by ID
+    let filteredPhotographerData = photographerData.then((res) => {
+        return res.filter(dataTest => checkPhotographerId(dataTest, "id"));
+    });
+
+    // Display the photographer media
+    filteredPhotographerMedia.then(res => {
+        let allMediaHTML = "";
+        let allMediaCarrouselHTML = "";
+        res.forEach(media => {
+            totalLikes += media.likes;
+            likeData.push(
+                {
+                    "id": media.id,
+                    "like": media.likes,
+                    "liked": false,
+                }
+            );
+            allMediaHTML += media.templateMediaPageInfo(getLikeData(media, likeData));
+            allMediaCarrouselHTML += media.templateMediaLightbox();
+        });
+        medias.innerHTML += allMediaHTML;
+        mediasCarrousel.innerHTML += allMediaCarrouselHTML;
+        totalLikePriceLike.innerText += totalLikes;
+
+        handleClickOfMediaImage(sectionMedia);
+        carrouselManager(sectionMedia);
+
+        handleLike(medias.querySelectorAll('.card-icon-like'), likeData);
+    });
+
+    // Display the photographer informations
+    filteredPhotographerData.then(res => {
+        let photographerInfos = res[0];
+        headerInformations.innerHTML += photographerInfos.templatePhotographerPageInfo();
+        headerProfilePhoto.innerHTML += photographerInfos.templatePhotographerPagePhoto();
+        totalLikePricePrice.innerText += photographerInfos.price;
+        contactModalName.innerText += photographerInfos.name;
     });
 
 
@@ -99,33 +119,48 @@ window.addEventListener("load", () => {
     }
 
     /**
-     * This function sort the media by popularity, date or title
+     * This function sort the media by popularity, date or title and insert in the page
      * @param {object} dataAttributes - The data attributes of the clicked option
      */
     function filterMediaByType(dataAttributes) {
-        sectionMedia.innerText = "";
-        let allMediaHTML = "";
         toggleFilterBtnMenu();
         selectedFilterBtnText.innerHTML = dataAttributes.content;
-        mediaData.then((res) => {
-            const filteredMedia = res.filter(dataTest => checkPhotographerId(dataTest, "photographerId"));
-            [...filteredMedia]
-                .sort((a, b) => {
-                    if (dataAttributes.type == "popularity") {
-                        return b.likes - a.likes;
-                    } else if (dataAttributes.type == "date") {
-                        return new Date(b.date) - new Date(a.date);
-                    } else if (dataAttributes.type == "title") {
-                        return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
-                    }
-                })
-                .forEach(media => {
-                    allMediaHTML += media.templateMediaPageInfo(getLikeData(media, likeData));
-                });
-            sectionMedia.innerHTML = allMediaHTML;
-            let cardsIconLike = sectionMedia.querySelectorAll('.card-icon-like');
-            handleLike(cardsIconLike, likeData);
+        filteredPhotographerMedia.then(() => {
+            let mediaElement = document.querySelectorAll('.media-element');
+            let mediaLightbox = document.querySelectorAll('.media-lightbox');
+
+            medias.innerHTML = sort(dataAttributes, mediaElement);
+            mediasCarrousel.innerHTML = sort(dataAttributes, mediaLightbox);
+
+            handleClickOfMediaImage(sectionMedia);
+
+            handleLike(medias.querySelectorAll('.card-icon-like'), likeData);
         });
+    }
+
+    /**
+     * This function sort medias and carrousel medias by popularity, date or 
+     * title and return it in HTML
+     * @param {object} dataAttributes
+     * @param {array} mediaToSort
+     * @returns {string} Returns the HTML of the sorted medias
+     */
+    function sort(dataAttributes, mediaToSort) {
+        let allHTML = "";
+        [...mediaToSort]
+            .sort((a, b) => {
+                if (dataAttributes.type == "popularity") {
+                    return b.dataset.like - a.dataset.like;
+                } else if (dataAttributes.type == "date") {
+                    return new Date(b.dataset.date) - new Date(a.dataset.date);
+                } else if (dataAttributes.type == "title") {
+                    return a.dataset.title.localeCompare(b.dataset.title, undefined, { sensitivity: 'base' });
+                }
+            })
+            .forEach(media => {
+                allHTML += media.outerHTML;
+            });
+        return allHTML;
     }
 
     /**
@@ -151,9 +186,17 @@ window.addEventListener("load", () => {
             cardIconLike.addEventListener('click', (event) => {
                 if (event.target.dataset.liked === "false") {
                     let idOfMedia = event.target.parentElement.parentElement.parentElement.dataset.id;
+                    let mediaLightbox = document.querySelectorAll('.media-lightbox');
+
+                    mediaLightbox.forEach(lightbox => {
+                        if (lightbox.dataset.id == idOfMedia) {
+                            lightbox.dataset.like++;
+                        }
+                    });
 
                     likeData.forEach(data => {
                         if (data.id === parseInt(idOfMedia)) {
+                            event.target.parentElement.parentElement.parentElement.dataset.like++;
                             data.like++;
                             data.liked = true;
                             event.target.previousElementSibling.innerText = data.like;
@@ -183,6 +226,142 @@ window.addEventListener("load", () => {
             }
         });
         return [like, isLiked];
+    }
+
+    /**
+     * This function manage the carrousel by add event listener on the buttons and keyboard
+     * @param {html} sectionMedia - The section media
+     */
+    function carrouselManager(sectionMedia) {
+        // DOM ----------
+        let carrousel = sectionMedia.querySelector('.carrousel');
+
+        let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
+        let mediaImage = sectionMedia.querySelectorAll('.media-element .media-image');
+
+        let mediaLightboxClose = carrousel.querySelector('.btn-close-lightbox');
+        let btnRightLightbox = carrousel.querySelector('.btn-right-lightbox');
+        let btnLeftLightbox = carrousel.querySelector('.btn-left-lightbox');
+
+        // EVENT --------
+        mediaLightboxClose.addEventListener('click', () => {
+            carrouselIsOpen = false;
+            carrousel.classList.add("hidden");
+            html.style.overflowY = 'scroll';
+            carrouselLightboxManager(sectionMedia, "close");
+        });
+
+        btnRightLightbox.addEventListener('click', () =>
+            carrouselLightboxManager(sectionMedia, "right")
+        );
+
+        btnLeftLightbox.addEventListener('click', () =>
+            carrouselLightboxManager(sectionMedia, "left")
+        );
+
+        document.addEventListener("keydown", e => {
+            if (carrouselIsOpen) {
+                if (e.key == "ArrowRight") {
+                    carrouselLightboxManager(sectionMedia, "right");
+                }
+            }
+        });
+
+        document.addEventListener("keydown", e => {
+            if (carrouselIsOpen) {
+                if (e.key == "ArrowLeft") {
+                    carrouselLightboxManager(sectionMedia, "left");
+                }
+            }
+        });
+
+        mediaImage.forEach(media => {
+            media.addEventListener('click', () => {
+                carrouselIsOpen = true;
+                let idOfMedia = media.parentElement.dataset.id;
+                carrousel.classList.remove("hidden");
+
+                mediaLightbox.forEach(lightbox => {
+                    if (lightbox.dataset.id == idOfMedia) {
+                        lightbox.classList.remove("hidden");
+                        html.style.overflowY = 'hidden';
+                    }
+                });
+            });
+        });
+    }
+
+    /**
+     * This function manage the carrousel lightbox by reload the lightbox 
+     * (media-lightbox) and after with the action parameter (close, right, left) 
+     * it close or toggle the next/previous lightbox 
+     * @param {html} sectionMedia - The section media
+     * @param {string} action - The action to do (close, right, left)
+     */
+    function carrouselLightboxManager(sectionMedia, action) {
+        let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
+
+        if (action === "close") {
+            mediaLightbox.forEach(lightbox => {
+                lightbox.classList.add("hidden");
+            });
+        } else if (action === "right") {
+            toggleNextLightbox("right", mediaLightbox);
+        } else if (action === "left") {
+            toggleNextLightbox("left", mediaLightbox);
+        }
+    }
+
+    /**
+     * This function add event listener on the media image to open 
+     * the carrousel and open the carrousel and the lightbox
+     * @param {html} sectionMedia - The section media
+     */
+    function handleClickOfMediaImage(sectionMedia) {
+        let carrousel = sectionMedia.querySelector('.carrousel');
+        let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
+        let mediaImage = sectionMedia.querySelectorAll('.media-element .media-image');
+
+        mediaImage.forEach(media => {
+            media.addEventListener('click', () => {
+                carrouselIsOpen = true;
+                let idOfMedia = media.parentElement.dataset.id;
+                carrousel.classList.remove("hidden");
+
+                mediaLightbox.forEach(lightbox => {
+                    if (lightbox.dataset.id == idOfMedia) {
+                        lightbox.classList.remove("hidden");
+                        html.style.overflowY = 'hidden';
+                    }
+                });
+            });
+        });
+    }
+
+    /**
+     * This function toggle the next lightbox when the user click 
+     * on the right or left button
+     * @param {string} direction - The direction of the toggle (right, left)
+     * @param {array} mediaLightbox - The array of all media lightbox
+     */
+    function toggleNextLightbox(direction, mediaLightbox) {
+        let stopLoop = false;
+
+        mediaLightbox.forEach((lightbox, index) => {
+            if (!stopLoop && !lightbox.classList.contains("hidden")) {
+                lightbox.classList.add("hidden");
+
+                let newIndex;
+                if (direction === "right") {
+                    newIndex = (index + 1) % mediaLightbox.length;
+                } else if (direction === "left") {
+                    newIndex = (index - 1 + mediaLightbox.length) % mediaLightbox.length;
+                }
+
+                mediaLightbox[newIndex].classList.remove("hidden");
+                stopLoop = true;
+            }
+        });
     }
 
 }, false);

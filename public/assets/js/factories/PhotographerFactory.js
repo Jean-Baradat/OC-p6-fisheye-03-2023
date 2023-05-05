@@ -1,5 +1,7 @@
+// eslint-disable-next-line no-unused-vars
 class PhotographerFactory {
     constructor() {
+        // eslint-disable-next-line no-undef
         this.PhotographersApi = new PhotographersApi('./../../../data/photographers.json', "photographers")
     }
 
@@ -12,6 +14,7 @@ class PhotographerFactory {
 
         let photographer = PhotographersData
             .map(photographer => {
+                // eslint-disable-next-line no-undef
                 return new PhotographerConstructor(photographer)
             });
 

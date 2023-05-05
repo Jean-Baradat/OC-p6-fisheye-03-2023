@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 class MediaConstructor {
     constructor(data) {
         this._id = data.id;
@@ -34,22 +35,25 @@ class MediaConstructor {
     get price() {
         return this._price;
     }
-    get mediaType() {
+
+    mediaType(isModal) {
         if (this._image) {
             return `
             <img 
                 src="./../assets/img/media/${this.photographerId}/${this.image}" 
                 alt="Photo nommée ${this.title}"
-                class="img"
-            >
+                title="${this.title}"
+                class="media">
             `;
         } else {
             return `
             <video 
+                ${isModal ? "controls" : ""}
                 src="./../assets/img/media/${this.photographerId}/${this.video}" 
                 alt="Vidéo nommée ${this.title}"
                 type="video/mp4"
-                class="img">
+                title="${this.title}"
+                class="media">
             </video>
             `;
         }
@@ -64,10 +68,15 @@ class MediaConstructor {
      */
     templateMediaPageInfo([like, isLiked]) {
         return `
-        <article class="media-element" data-id="${this.id}">
-            <a href="#" aria-label="Ouverture de l'image ${this.title}">
-                ${this.mediaType}
-            </a>
+        <article
+            class="media-element" 
+            data-id="${this.id}" 
+            data-like="${this.likes}" 
+            data-date="${this.date}" 
+            data-title="${this.title}">
+            <div class="media-image">
+                ${this.mediaType(false)}
+            </div>
             <header>
                 <h2 title="Titre : ${this.title}">${this.title}</h2>
                 <p class="like">
@@ -76,6 +85,22 @@ class MediaConstructor {
                 </p>
             </header>
         </article>
+        `;
+    }
+
+    templateMediaLightbox() {
+        return `
+        <div 
+            class="media-lightbox hidden" 
+            data-id="${this.id}"
+            data-like="${this.likes}" 
+            data-date="${this.date}" 
+            data-title="${this.title}">
+            <figure>
+                ${this.mediaType(true)}
+                <figcaption>${this.title}</figcaption>
+            </figure>
+        </div>
         `;
     }
 }

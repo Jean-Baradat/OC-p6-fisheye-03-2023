@@ -20,6 +20,7 @@ class Api {
     }
 }
 
+// eslint-disable-next-line no-unused-vars
 class PhotographersApi extends Api {
     constructor(url, type) {
         super(url);
