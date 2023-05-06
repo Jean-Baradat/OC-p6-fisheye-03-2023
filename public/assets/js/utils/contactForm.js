@@ -4,6 +4,9 @@ window.addEventListener("load", () => {
     const btnCloseModal = document.querySelector('.btn-close-modal');
     const html = document.querySelector('html');
     const formContactForm = document.querySelector('form[name="contact-form"]');
+    const formTitle = document.querySelector("#contact_modal .modal .form-title");
+    const contactModal = document.getElementById("contact_modal");
+    const submitBtn = document.querySelector('button[type="submit"]');
 
 
     // VARIABLES ---------------------------------------------------------------------
@@ -30,19 +33,45 @@ window.addEventListener("load", () => {
     btnOpenModal.addEventListener('click', displayModal);
     btnCloseModal.addEventListener('click', closeModal);
     formContactForm.addEventListener('submit', submitContactForm);
+    contactModal.addEventListener('keydown', e => handleFocus(e));
 
 
     // FUNCTIONS --------------------------------------------------------------------
+
+    function handleFocus(e) {
+        let isTabPressed = e.key === 'Tab';
+
+        if (!isTabPressed) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+            return;
+        }
+
+        if (e.shiftKey) {
+            if (document.activeElement === formTitle) {
+                submitBtn.focus();
+                e.preventDefault();
+            }
+
+        } else {
+            if (document.activeElement === submitBtn) {
+                formTitle.focus();
+                e.preventDefault();
+            }
+        }
+    }
+
     function displayModal() {
-        const modal = document.getElementById("contact_modal");
-        modal.style.display = "flex";
+        contactModal.style.display = "flex";
         html.style.position = 'fixed';
+        formTitle.focus();
     }
 
     function closeModal() {
-        const modal = document.getElementById("contact_modal");
-        modal.style.display = "none";
+        contactModal.style.display = "none";
         html.style.position = 'relative';
+        btnOpenModal.focus();
     }
 
     function submitContactForm(e) {

@@ -16,6 +16,12 @@ window.addEventListener("load", () => {
     const html = document.querySelector('html');
     let sectionMedia = document.querySelector('.section-media');
     let carrouselIsOpen = false;
+    let carrousel = sectionMedia.querySelector('.carrousel');
+    let mediaLightboxClose = carrousel.querySelector('.btn-close-lightbox');
+    let btnRightLightbox = carrousel.querySelector('.btn-right-lightbox');
+    let btnLeftLightbox = carrousel.querySelector('.btn-left-lightbox');
+    let logo = document.querySelector('.logo').parentElement;
+    logo.focus();
 
     /*
         Initialize the PhotographerFactory and execute the main 
@@ -70,7 +76,6 @@ window.addEventListener("load", () => {
         totalLikePriceLike.innerText += totalLikes;
 
         handleClickOfMediaImage(sectionMedia);
-        carrouselManager(sectionMedia);
 
         handleLike(medias.querySelectorAll('.card-icon-like'), likeData);
     });
@@ -94,6 +99,41 @@ window.addEventListener("load", () => {
     // Event for the click outside the filter button and the menu
     document.addEventListener("click", (e) => hideFilterMenuOnClickOutside(e));
 
+    mediaLightboxClose.addEventListener('click', () => {
+        carrouselIsOpen = false;
+        carrousel.classList.add("hidden");
+        html.style.overflowY = 'scroll';
+        carrouselLightboxManager(sectionMedia, "close");
+    });
+
+    btnRightLightbox.addEventListener('click', () =>
+        carrouselLightboxManager(sectionMedia, "right")
+    );
+
+    btnLeftLightbox.addEventListener('click', () =>
+        carrouselLightboxManager(sectionMedia, "left")
+    );
+
+    document.addEventListener("keydown", e => {
+        if (carrouselIsOpen) {
+            if (e.key == "ArrowRight") {
+                carrouselLightboxManager(sectionMedia, "right");
+            }
+        }
+    });
+
+    document.addEventListener("keydown", e => {
+        if (carrouselIsOpen) {
+            if (e.key == "ArrowLeft") {
+                carrouselLightboxManager(sectionMedia, "left");
+            }
+        }
+    });
+
+    carrousel.addEventListener('keydown', e => handleFocusCarrousel(e));
+
+    filterButton.addEventListener('keydown', e => handleFocusFilterButton(e));
+
 
     // FUNCTIONS --------------------------------------------------------------------
     /**
@@ -112,6 +152,21 @@ window.addEventListener("load", () => {
      * @returns {void}
      */
     function toggleFilterBtnMenu() {
+        if (!filterBtnOptions.classList.contains("hidden")) {
+            filterBtn.focus();
+            filterBtn.setAttribute("aria-expanded", "false");
+            if (selectedFilterBtnText.innerHTML.replace(/\s/g, '') !== "Sélectionner") {
+                filterBtn.setAttribute(
+                    "aria-label",
+                    `Ouvrir le menu de filtre. Option sélectionnée : ${selectedFilterBtnText.innerHTML}`
+                );
+            } else {
+                filterBtn.setAttribute("aria-label", "Ouvrir le menu de filtre");
+            }
+        } else {
+            filterBtn.setAttribute("aria-expanded", "true");
+            filterBtn.setAttribute("aria-label", "Fermer le menu de filtre");
+        }
         filterBtnOptions.classList.toggle("hidden");
         filterBtn.classList.toggle("rounded-b");
         filterIcon.classList.toggle("fa-angle-down");
@@ -123,8 +178,8 @@ window.addEventListener("load", () => {
      * @param {object} dataAttributes - The data attributes of the clicked option
      */
     function filterMediaByType(dataAttributes) {
-        toggleFilterBtnMenu();
         selectedFilterBtnText.innerHTML = dataAttributes.content;
+        toggleFilterBtnMenu();
         filteredPhotographerMedia.then(() => {
             let mediaElement = document.querySelectorAll('.media-element');
             let mediaLightbox = document.querySelectorAll('.media-lightbox');
@@ -199,6 +254,7 @@ window.addEventListener("load", () => {
                             event.target.parentElement.parentElement.parentElement.dataset.like++;
                             data.like++;
                             data.liked = true;
+                            event.target.setAttribute('aria-pressed', 'true');
                             event.target.previousElementSibling.innerText = data.like;
                             event.target.dataset.liked = data.liked;
                         }
@@ -229,69 +285,6 @@ window.addEventListener("load", () => {
     }
 
     /**
-     * This function manage the carrousel by add event listener on the buttons and keyboard
-     * @param {html} sectionMedia - The section media
-     */
-    function carrouselManager(sectionMedia) {
-        // DOM ----------
-        let carrousel = sectionMedia.querySelector('.carrousel');
-
-        let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
-        let mediaImage = sectionMedia.querySelectorAll('.media-element .media-image');
-
-        let mediaLightboxClose = carrousel.querySelector('.btn-close-lightbox');
-        let btnRightLightbox = carrousel.querySelector('.btn-right-lightbox');
-        let btnLeftLightbox = carrousel.querySelector('.btn-left-lightbox');
-
-        // EVENT --------
-        mediaLightboxClose.addEventListener('click', () => {
-            carrouselIsOpen = false;
-            carrousel.classList.add("hidden");
-            html.style.overflowY = 'scroll';
-            carrouselLightboxManager(sectionMedia, "close");
-        });
-
-        btnRightLightbox.addEventListener('click', () =>
-            carrouselLightboxManager(sectionMedia, "right")
-        );
-
-        btnLeftLightbox.addEventListener('click', () =>
-            carrouselLightboxManager(sectionMedia, "left")
-        );
-
-        document.addEventListener("keydown", e => {
-            if (carrouselIsOpen) {
-                if (e.key == "ArrowRight") {
-                    carrouselLightboxManager(sectionMedia, "right");
-                }
-            }
-        });
-
-        document.addEventListener("keydown", e => {
-            if (carrouselIsOpen) {
-                if (e.key == "ArrowLeft") {
-                    carrouselLightboxManager(sectionMedia, "left");
-                }
-            }
-        });
-
-        mediaImage.forEach(media => {
-            media.addEventListener('click', () => {
-                carrouselIsOpen = true;
-                let idOfMedia = media.parentElement.dataset.id;
-                carrousel.classList.remove("hidden");
-
-                mediaLightbox.forEach(lightbox => {
-                    if (lightbox.dataset.id == idOfMedia) {
-                        lightbox.classList.remove("hidden");
-                        html.style.overflowY = 'hidden';
-                    }
-                });
-            });
-        });
-    }
-
-    /**
      * This function manage the carrousel lightbox by reload the lightbox 
      * (media-lightbox) and after with the action parameter (close, right, left) 
      * it close or toggle the next/previous lightbox 
@@ -300,15 +293,23 @@ window.addEventListener("load", () => {
      */
     function carrouselLightboxManager(sectionMedia, action) {
         let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
+        let mediaImage = sectionMedia.querySelectorAll('.media-element .media-image');
 
         if (action === "close") {
+            mediaImage[0].focus();
             mediaLightbox.forEach(lightbox => {
                 lightbox.classList.add("hidden");
             });
         } else if (action === "right") {
             toggleNextLightbox("right", mediaLightbox);
+            mediaLightbox.forEach(lightbox => {
+                lightbox.querySelector('figure').focus();
+            });
         } else if (action === "left") {
             toggleNextLightbox("left", mediaLightbox);
+            mediaLightbox.forEach(lightbox => {
+                lightbox.querySelector('figure').focus();
+            });
         }
     }
 
@@ -318,7 +319,6 @@ window.addEventListener("load", () => {
      * @param {html} sectionMedia - The section media
      */
     function handleClickOfMediaImage(sectionMedia) {
-        let carrousel = sectionMedia.querySelector('.carrousel');
         let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
         let mediaImage = sectionMedia.querySelectorAll('.media-element .media-image');
 
@@ -332,6 +332,7 @@ window.addEventListener("load", () => {
                     if (lightbox.dataset.id == idOfMedia) {
                         lightbox.classList.remove("hidden");
                         html.style.overflowY = 'hidden';
+                        lightbox.querySelector('figure').focus();
                     }
                 });
             });
@@ -362,6 +363,48 @@ window.addEventListener("load", () => {
                 stopLoop = true;
             }
         });
+    }
+
+    function handleFocusCarrousel(e) {
+        let isTabPressed = e.key === 'Tab';
+
+        if (!isTabPressed) {
+            return;
+        }
+
+        if (e.shiftKey) {
+            if (document.activeElement === btnLeftLightbox) {
+                mediaLightboxClose.focus();
+                e.preventDefault();
+            }
+        } else {
+            if (document.activeElement === mediaLightboxClose) {
+                btnLeftLightbox.focus();
+                e.preventDefault();
+            }
+        }
+    }
+
+    function handleFocusFilterButton(e) {
+        let isTabPressed = e.key === 'Tab';
+
+        if (!isTabPressed) {
+            return;
+        }
+
+        if (filterBtn.getAttribute("aria-expanded") === "true") {
+            if (e.shiftKey) {
+                if (document.activeElement === filterBtn) {
+                    filterBtnOptions.querySelectorAll('button')[2].focus();
+                    e.preventDefault();
+                }
+            } else {
+                if (document.activeElement === filterBtnOptions.querySelectorAll('button')[2]) {
+                    filterBtn.focus();
+                    e.preventDefault();
+                }
+            }
+        }
     }
 
 }, false);

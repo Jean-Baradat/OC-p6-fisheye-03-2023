@@ -83,7 +83,7 @@ class PhotographerConstructor {
      */
     templatePhotographerPagePhoto() {
         return `
-        <img src="./../${this.portrait}" alt="${this.name}">
+        <img src="./../${this.portrait}" alt="Photo de profil de ${this.name}">
         `;
     }
 }

@@ -29,6 +29,8 @@
 
 .media-element .media-image {
     cursor: pointer;
+    border: none;
+    display: flex;
 }
 
 .media-element:hover {
@@ -65,6 +67,9 @@
 .media-element header .card-icon-like {
     cursor: pointer;
     font-size: 20px;
+    border: none;
+    background-color: transparent;
+    color: var(--carmine);
 }
 
 .media-element header h2{
@@ -163,9 +168,11 @@
     width: 100%;
 }
 
-.modal header img {
+.modal header button {
     cursor: pointer;
     margin-left: 5rem;
+    border: none;
+    background-color: transparent;
 }
 
 .modal header h2 {
@@ -433,6 +440,10 @@ form input, form textarea {
     .section-media .filter {
         margin: 2rem 2rem;
     }
+
+    .media-element header h2 {
+        max-width: 14ch;
+    }
 }
 
 @media screen and (max-width: 930px) {
@@ -474,6 +485,10 @@ form input, form textarea {
 
     .media-element:hover {
         box-shadow: none;
+    }
+
+    .media-element header h2 {
+        max-width: 80%;
     }
 }
 

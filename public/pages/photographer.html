@@ -15,28 +15,31 @@
 
 <body class="photographer">
     <header class="main">
-        <a href="./../index.html">
-            <img src="./../assets/img/images/logo.png" class="logo" alt="Fisheye" />
+        <a href="./../index.html" aria-label="Accéder à la page d'accueil via le logo Fisheye">
+            <img src="./../assets/img/images/logo.png" class="logo" alt="Logo de Fisheye" />
         </a>
     </header>
     <main id="photograph-page">
         <div class="photograph-header">
-            <div id="informations"></div>
+            <div id="informations" tabindex="0"></div>
             <button class="contact_button btn-open-modal">
                 Contactez-moi
             </button>
-            <div id="profile-photo"></div>
+            <div id="profile-photo" tabindex="0"></div>
         </div>
         <section class="section-media">
             <div class="filter">
-                <p class="filter-text">Trier par</p>
+                <p class="filter-text" tabindex="0">Trier par</p>
                 <div class="button">
-                    <button class="filter-btn rounded-b">
+                    <button 
+                        class="filter-btn rounded-b"
+                        aria-label="Sélectionner un filtre avec entrée"
+                        aria-expanded="false">
                         <div class="content">
                             <span class="selected-filter-btn-text">
                                 Sélectionner
                             </span>
-                            <i id="filter-icon" class="fa-solid fa-angle-down"></i>
+                            <span id="filter-icon" class="fa-solid fa-angle-down"></span>
                         </div>
                     </button>
                     <div id="filter-btn-options" class="hidden">
@@ -44,21 +47,24 @@
                             type="button" 
                             class="option" 
                             data-type="popularity"
-                            data-content="Popularité">
+                            data-content="Popularité"
+                            aria-label="Trier par popularité">
                             Popularité
                         </button>
                         <button 
                             type="button" 
                             class="option" 
                             data-type="date"
-                            data-content="Date">
+                            data-content="Date"
+                            aria-label="Trier par date">
                             Date
                         </button>
                         <button 
                             type="button" 
                             class="option" 
                             data-type="title"
-                            data-content="Titre">
+                            data-content="Titre"
+                            aria-label="Trier par ordre alphabétique">
                             Titre
                         </button>
                     </div>
@@ -67,15 +73,15 @@
             <div class="medias"></div>
             <div class="carrousel hidden">
                 <button class="btn-left-lightbox">
-                    <img src="./../assets/img/icons/chevron-left.svg" alt="Précédent" class="arrow-left">
+                    <img src="./../assets/img/icons/chevron-left.svg" alt="Média précédent" class="arrow-left">
                 </button>
                 <div class="medias-carrousel"></div>
                 <div class="right-btn">
                     <button class="btn-right-lightbox">
-                        <img src="./../assets/img/icons/chevron-right.svg" alt="Suivant" class="arrow-right">
+                        <img src="./../assets/img/icons/chevron-right.svg" alt="Média suivant" class="arrow-right">
                     </button>
                     <button class="btn-close-lightbox">
-                        <img src="./../assets/img/icons/close-carmine.svg" alt="Fermer" class="close-img">
+                        <img src="./../assets/img/icons/close-carmine.svg" alt="Fermer le carrousel" class="close-img">
                     </button>
                 </div>
             </div>
@@ -84,33 +90,57 @@
     <div id="contact_modal">
         <div class="modal">
             <header>
-                <h2>Contactez-moi <span class="name"></span></h2>
-                <img src="./../assets/img/icons/close.svg" class="btn-close-modal" alt="Fermer" />
+                <h2
+                    tabindex="0"
+                    class="form-title">
+                    Contactez-moi
+                    <span class="name"></span>
+                </h2>
+                <button class="btn-close-modal" tabindex="0">
+                    <img 
+                        src="./../assets/img/icons/close.svg"
+                        alt="Fermer le formulaire de contact"/>
+                </button>
             </header>
             <form name="contact-form">
                 <div>
                     <label for="firstname">Prénom</label>
-                    <input type="text" id="firstname" name="firstname">
+                    <input
+                        type="text"
+                        id="firstname"
+                        name="firstname"
+                        aria-label="Votre prénom"
+                        aria-describedby="mess-err-firstname">
                     <p class="form-fields-error" id="mess-err-firstname">
-                        <i class="fa-solid fa-circle-info"></i>
+                        <span class="fa-solid fa-circle-info"></span>
                         2 caractères minimum avec tirets et apostrophes autorisés sauf au début 
                         et à la fin et plus de 2 fois de suite.
                     </p>
                 </div>
                 <div>
                     <label for="lastname">Nom</label>
-                    <input type="text" id="lastname" name="lastname">
+                    <input
+                        type="text"
+                        id="lastname"
+                        name="lastname"
+                        aria-label="Votre nom"
+                        aria-describedby="mess-err-lastname">
                     <p class="form-fields-error" id="mess-err-lastname">
-                        <i class="fa-solid fa-circle-info"></i>
+                        <span class="fa-solid fa-circle-info"></span>
                         2 caractères minimum avec tirets et apostrophes autorisés sauf au début 
                         et à la fin et plus de 2 fois de suite.
                     </p>
                 </div>
                 <div>
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email">
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        aria-label="Votre adresse email"
+                        aria-describedby="mess-err-email">
                     <p class="form-fields-error" id="mess-err-email">
-                        <i class="fa-solid fa-circle-info"></i>
+                        <span class="fa-solid fa-circle-info"></span>
                         Doit respecter le format nom@domain.extention par exemple 
                         jeanpierre@gmail.com.
                     </p>
@@ -119,18 +149,25 @@
                     <label for="message">Votre message</label>
                     <textarea name="message" id="message"></textarea>
                 </div>
-                <button class="contact_button" type="submit">Envoyer</button>
+                <button
+                    class="contact_button"
+                    aria-label="Cliquez pour envoyer le formulaire"
+                    type="submit"
+                    role="submit">
+                    Envoyer
+                </button>
             </form>
         </div>
     </div>
-    <aside class="total-like-price">
+    <aside class="total-like-price" tabindex="0">
         <p class="like-block">
             <span class="like"></span>
-            <i class="fa-solid fa-heart"></i>
+            <span class="fa-solid fa-heart" aria-label="total des J'aime"></span>
         </p>
         <p>
             <span class="price"></span>
             € / jour
+            <span aria-label="prix du photographe"></span>
         </p>
     </aside>
     <!-- API -->

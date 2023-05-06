@@ -39,21 +39,21 @@ class MediaConstructor {
     mediaType(isModal) {
         if (this._image) {
             return `
-            <img 
-                src="./../assets/img/media/${this.photographerId}/${this.image}" 
+            <img
+                src="./../assets/img/media/${this.photographerId}/${this.image}"
                 alt="Photo nommée ${this.title}"
-                title="${this.title}"
                 class="media">
             `;
         } else {
             return `
-            <video 
-                ${isModal ? "controls" : ""}
-                src="./../assets/img/media/${this.photographerId}/${this.video}" 
-                alt="Vidéo nommée ${this.title}"
-                type="video/mp4"
-                title="${this.title}"
+            <video
+                ${isModal ? "controls" : ""} 
+                ${!isModal ? `alt='Vidéo nommée ${this.title}'` : ""}
                 class="media">
+                <source 
+                    src="./../assets/img/media/${this.photographerId}/${this.video}" 
+                    type="video/mp4">
+                <track src="#" srclang="fr" label="Français" default>
             </video>
             `;
         }
@@ -74,14 +74,21 @@ class MediaConstructor {
             data-like="${this.likes}" 
             data-date="${this.date}" 
             data-title="${this.title}">
-            <div class="media-image">
+            <button
+                class="media-image"
+                aria-label="Ouvrir le média nommé ${this.title} dans un carrousel">
                 ${this.mediaType(false)}
-            </div>
+            </button>
             <header>
                 <h2 title="Titre : ${this.title}">${this.title}</h2>
                 <p class="like">
                     <span class="number">${like}</span>
-                    <i class="fa-solid fa-heart card-icon-like" data-liked="${isLiked}"></i>
+                    <button 
+                        aria-label="Ajouter un j'aime à ${this.title}" 
+                        class="fa-solid fa-heart card-icon-like" 
+                        aria-pressed="${isLiked}"
+                        data-liked="${isLiked}">
+                    </button>
                 </p>
             </header>
         </article>
@@ -96,9 +103,12 @@ class MediaConstructor {
             data-like="${this.likes}" 
             data-date="${this.date}" 
             data-title="${this.title}">
-            <figure>
+            <figure
+                tabindex="0">
                 ${this.mediaType(true)}
-                <figcaption>${this.title}</figcaption>
+                <figcaption>
+                    ${this.title}
+                </figcaption>
             </figure>
         </div>
         `;
