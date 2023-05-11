@@ -31,6 +31,10 @@ a {
     padding: 0 5rem;
 }
 
+header.main a:focus {
+    outline: none;
+}
+
 header {
     display: flex;
     flex-direction: row;

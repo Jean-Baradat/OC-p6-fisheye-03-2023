@@ -92,7 +92,7 @@ window.addEventListener("load", () => {
 
     // EVENT ------------------------------------------------------------------------
     // Event for the filter button
-    filterBtn.addEventListener('click', toggleFilterBtnMenu);
+    filterBtn.addEventListener('click', () => toggleFilterBtnMenu());
     options.forEach(option => {
         option.addEventListener('click', () => filterMediaByType(option.dataset));
     });
@@ -143,7 +143,7 @@ window.addEventListener("load", () => {
      * @returns {boolean} Returns true if the ID in the data object 
      * matches the ID parameter in the URL, otherwise false
      */
-    function checkPhotographerId(data, nameId) {
+    const checkPhotographerId = (data, nameId) => {
         return data[nameId] == new URLSearchParams(window.location.search).get("id");
     }
 
@@ -151,7 +151,7 @@ window.addEventListener("load", () => {
      * Toggles the visibility and style of the filter button menu and its icon
      * @returns {void}
      */
-    function toggleFilterBtnMenu() {
+    const toggleFilterBtnMenu = () => {
         if (!filterBtnOptions.classList.contains("hidden")) {
             filterBtn.focus();
             filterBtn.setAttribute("aria-expanded", "false");
@@ -177,7 +177,7 @@ window.addEventListener("load", () => {
      * This function sort the media by popularity, date or title and insert in the page
      * @param {object} dataAttributes - The data attributes of the clicked option
      */
-    function filterMediaByType(dataAttributes) {
+    const filterMediaByType = (dataAttributes) => {
         selectedFilterBtnText.innerHTML = dataAttributes.content;
         toggleFilterBtnMenu();
         filteredPhotographerMedia.then(() => {
@@ -200,7 +200,7 @@ window.addEventListener("load", () => {
      * @param {array} mediaToSort
      * @returns {string} Returns the HTML of the sorted medias
      */
-    function sort(dataAttributes, mediaToSort) {
+    const sort = (dataAttributes, mediaToSort) => {
         let allHTML = "";
         [...mediaToSort]
             .sort((a, b) => {
@@ -223,7 +223,7 @@ window.addEventListener("load", () => {
      * if the user clicks outside the filter button and the menu
      * @param {object} e - The event object
      */
-    function hideFilterMenuOnClickOutside(e) {
+    const hideFilterMenuOnClickOutside = (e) => {
         if (e.target !== filterButton && !filterButton.contains(e.target)) {
             filterBtnOptions.classList.add("hidden");
             filterBtn.classList.add("rounded-b");
@@ -236,7 +236,7 @@ window.addEventListener("load", () => {
      * @param {array} cardsIconLike
      * @param {array} likeData
      */
-    function handleLike(cardsIconLike, likeData) {
+    const handleLike = (cardsIconLike, likeData) => {
         cardsIconLike.forEach(cardIconLike => {
             cardIconLike.addEventListener('click', (event) => {
                 if (event.target.dataset.liked === "false") {
@@ -272,7 +272,7 @@ window.addEventListener("load", () => {
      * @param {array} likeData 
      * @returns {array} Returns an array with the like number and the liked status
      */
-    function getLikeData(media, likeData) {
+    const getLikeData = (media, likeData) => {
         let like = null;
         let isLiked = null;
         likeData.forEach(data => {
@@ -291,7 +291,7 @@ window.addEventListener("load", () => {
      * @param {html} sectionMedia - The section media
      * @param {string} action - The action to do (close, right, left)
      */
-    function carrouselLightboxManager(sectionMedia, action) {
+    const carrouselLightboxManager = (sectionMedia, action) => {
         let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
         let mediaImage = sectionMedia.querySelectorAll('.media-element .media-image');
 
@@ -318,7 +318,7 @@ window.addEventListener("load", () => {
      * the carrousel and open the carrousel and the lightbox
      * @param {html} sectionMedia - The section media
      */
-    function handleClickOfMediaImage(sectionMedia) {
+    const handleClickOfMediaImage = (sectionMedia) => {
         let mediaLightbox = sectionMedia.querySelectorAll('.media-lightbox');
         let mediaImage = sectionMedia.querySelectorAll('.media-element .media-image');
 
@@ -345,7 +345,7 @@ window.addEventListener("load", () => {
      * @param {string} direction - The direction of the toggle (right, left)
      * @param {array} mediaLightbox - The array of all media lightbox
      */
-    function toggleNextLightbox(direction, mediaLightbox) {
+    const toggleNextLightbox = (direction, mediaLightbox) => {
         let stopLoop = false;
 
         mediaLightbox.forEach((lightbox, index) => {
@@ -365,7 +365,11 @@ window.addEventListener("load", () => {
         });
     }
 
-    function handleFocusCarrousel(e) {
+    /**
+     * Block the focus on the carrousel when the user press tab
+     * @param {KeyboardEvent} e - The event object
+     */
+    const handleFocusCarrousel = (e) => {
         let isTabPressed = e.key === 'Tab';
 
         if (!isTabPressed) {
@@ -385,7 +389,12 @@ window.addEventListener("load", () => {
         }
     }
 
-    function handleFocusFilterButton(e) {
+    /**
+     * Block the focus on the filter button when the user press tab
+     * @param {KeyboardEvent} e - The event object 
+     * @returns 
+     */
+    const handleFocusFilterButton = (e) => {
         let isTabPressed = e.key === 'Tab';
 
         if (!isTabPressed) {

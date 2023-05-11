@@ -30,15 +30,19 @@ window.addEventListener("load", () => {
     ];
 
     // EVENT ------------------------------------------------------------------------
-    btnOpenModal.addEventListener('click', displayModal);
-    btnCloseModal.addEventListener('click', closeModal);
-    formContactForm.addEventListener('submit', submitContactForm);
+    btnOpenModal.addEventListener('click', () => displayModal());
+    btnCloseModal.addEventListener('click', () => closeModal());
+    formContactForm.addEventListener('submit', e => submitContactForm(e));
     contactModal.addEventListener('keydown', e => handleFocus(e));
 
 
     // FUNCTIONS --------------------------------------------------------------------
-
-    function handleFocus(e) {
+    /**
+     * Block the focus on the form contact modal when the user press tab
+     * @param {KeyboardEvent} e - The keyboard event
+     * @returns 
+     */
+    const handleFocus = (e) => {
         let isTabPressed = e.key === 'Tab';
 
         if (!isTabPressed) {
@@ -62,19 +66,30 @@ window.addEventListener("load", () => {
         }
     }
 
-    function displayModal() {
+    /**
+     * Function to display the contact modal when the user click on the button "Contact me"
+     */
+    const displayModal = () => {
         contactModal.style.display = "flex";
         html.style.position = 'fixed';
         formTitle.focus();
     }
 
-    function closeModal() {
+    /**
+     * Function to close the contact modal when the user click on the button "X"
+     */
+    const closeModal = () => {
         contactModal.style.display = "none";
         html.style.position = 'relative';
         btnOpenModal.focus();
     }
 
-    function submitContactForm(e) {
+    /**
+     * Function to submit the contact form when the user click on the button "submit"
+     * @param {SubmitEvent} e - The submit event
+     * @returns {boolean} false if the form is not valid
+     */
+    const submitContactForm = (e) => {
         e.preventDefault();
 
         // get the form data

@@ -36,6 +36,11 @@ class MediaConstructor {
         return this._price;
     }
 
+    /**
+     * Generates an HTML of the media (img or video)
+     * @param {boolean} isModal 
+     * @returns {string} Template HTML
+     */
     mediaType(isModal) {
         if (this._image) {
             return `
@@ -95,6 +100,10 @@ class MediaConstructor {
         `;
     }
 
+    /**
+     * Generates an HTML template for the lightbox media
+     * @returns {string} Template HTML
+     */
     templateMediaLightbox() {
         return `
         <div 
