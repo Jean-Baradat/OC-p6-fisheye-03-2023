@@ -158,7 +158,7 @@ window.addEventListener("load", () => {
             if (selectedFilterBtnText.innerHTML.replace(/\s/g, '') !== "Sélectionner") {
                 filterBtn.setAttribute(
                     "aria-label",
-                    `Ouvrir le menu de filtre. Option sélectionnée : ${selectedFilterBtnText.innerHTML}`
+                    `Ouvrir le menu de filtre. Option sélectionnée pour le tri : ${selectedFilterBtnText.innerHTML}`
                 );
             } else {
                 filterBtn.setAttribute("aria-label", "Ouvrir le menu de filtre");
