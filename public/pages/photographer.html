@@ -34,7 +34,9 @@
                     <button 
                         class="filter-btn rounded-b"
                         aria-label="Sélectionner un filtre avec entrée"
-                        aria-expanded="false">
+                        aria-expanded="false"
+                        role="button"
+                        aria-haspopup="listbox">
                         <div class="content">
                             <span class="selected-filter-btn-text">
                                 Sélectionner
@@ -44,27 +46,30 @@
                     </button>
                     <div id="filter-btn-options" class="hidden">
                         <button 
-                            type="button" 
+                            role="listbox" 
+                            aria-activedescendant="popularity"
                             class="option" 
                             data-type="popularity"
                             data-content="Popularité"
-                            aria-label="Trier par popularité">
+                            aria-labelledby="Trier par popularité">
                             Popularité
                         </button>
                         <button 
-                            type="button" 
+                            role="listbox" 
+                            aria-activedescendant="date"
                             class="option" 
                             data-type="date"
                             data-content="Date"
-                            aria-label="Trier par date">
+                            aria-labelledby="Trier par date">
                             Date
                         </button>
                         <button 
-                            type="button" 
+                            role="listbox" 
+                            aria-activedescendant="title"
                             class="option" 
                             data-type="title"
                             data-content="Titre"
-                            aria-label="Trier par ordre alphabétique">
+                            aria-labelledby="Trier par ordre alphabétique">
                             Titre
                         </button>
                     </div>
